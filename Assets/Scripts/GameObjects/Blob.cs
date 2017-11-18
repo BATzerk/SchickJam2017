@@ -13,6 +13,9 @@ public class Blob : MonoBehaviour {
 	[SerializeField] private PaddleController paddleController;
 	private List<Debri> myDebri; // all the Schick that's stuck to me! Schickhead!
 
+	public float life;
+	const float maxLife = 100;
+
 	// Getters
 	public Transform tf_MyDebris { get { return tf_myDebris; } }
 	public float CachedRadius { get { return cachedRadius; } }
@@ -36,6 +39,7 @@ public class Blob : MonoBehaviour {
 		GameUtils.DestroyAllChildren (tf_myDebris);
 		myDebri = new List<Debri>();
 		cachedRadius = 1f;
+		life = maxLife;
 	}
 
 
@@ -64,6 +68,7 @@ public class Blob : MonoBehaviour {
 	public void GetHitByDebri (Debri _debri) {
 		AddDestructiveBurst (_debri.transform.localPosition);
 		Destroy (_debri.gameObject);
+		life -= 100;
 	}
 	private void AddDestructiveBurst (Vector2 pos) {
 		DestructiveBurst burst = Instantiate(prefabGO_destructiveBurst).GetComponent<DestructiveBurst>();
