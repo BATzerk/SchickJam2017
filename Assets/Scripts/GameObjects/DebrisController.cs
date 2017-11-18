@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class DebrisController : MonoBehaviour {
 	// Properties
-	private float spawnInterval = 1.2f; // in SECONDS.
+	private float spawnInterval = 0.2f; // in SECONDS.
 	private float timeUntilSpawnDebri;
 	// References
-	[SerializeField] private Transform tf_debris;
+	[SerializeField] private Blob blob;
 	[SerializeField] private GameObject prefabGO_debri;
+	[SerializeField] private Transform tf_debris;
 
 
 	// ----------------------------------------------------------------
@@ -30,19 +31,19 @@ public class DebrisController : MonoBehaviour {
 		// Position and vel!
 		float posAngle = Random.Range(-Mathf.PI, Mathf.PI);
 		float velAngle = -posAngle;
-//		velAngle += Random.Range(-0.3f, 0.3f); // QQQ vary up the direction it's heading in a bit, so it's not 100% going to the center.
-		const float spawnRadius = 10f;
-		const float absVel = 2f;
+		velAngle += Random.Range(-0.15f, 0.15f); // vary up the direction it's heading in a bit, so it's not 100% going to the center.
+		float spawnRadius = blob.CachedRadius * 6f;
+		const float absVel = 2.9f;
 		Vector2 pos = new Vector2(Mathf.Cos(posAngle)*spawnRadius, Mathf.Sin(posAngle)*spawnRadius);
 		Vector2 vel = new Vector2(-Mathf.Cos(velAngle)*absVel, Mathf.Sin(velAngle)*absVel);
 		Debri newObj = Instantiate(prefabGO_debri).GetComponent<Debri>();
 
 
 		float rad =  Random.Range(0,100);
-		if(rad < 40){
-			newObj.Initialize (tf_debris, pos, vel, Debri.Types.Good);
-		}else{
+		if(rad < 12) {
 			newObj.Initialize (tf_debris, pos, vel, Debri.Types.Bad);
+		}else{
+			newObj.Initialize (tf_debris, pos, vel, Debri.Types.Good);
 		}
 
 	
@@ -62,7 +63,7 @@ public class DebrisController : MonoBehaviour {
 		}
 		// QQQ TESTING
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			for (int i=0; i<50; i++) {
+			for (int i=0; i<10; i++) {
 				SpawnDebri ();
 			}
 		}

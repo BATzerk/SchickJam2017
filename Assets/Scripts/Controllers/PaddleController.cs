@@ -32,8 +32,7 @@ public class PaddleController : MonoBehaviour {
 	//  Doers
 	// ----------------------------------------------------------------
 	/** canShrinkDistance: Set to false if you don't want the paddles to be able to get *closer* to the center. We DO want the distance to shrink when we lose bits. */
-	public void UpdatePaddleDistanceTarget (bool canShrinkDistance) {
-		float blobRadius = blob.CalculateRadius ();
+	public void UpdatePaddleDistanceTarget (float blobRadius, bool canShrinkDistance) {
 		blobRadius += 0.7f; // Make it bigga! Some wigga room!
 		// If we CAN'T shrink the distance, but we WANT to, then do nothin'.
 		if (!canShrinkDistance && blobRadius<paddleDistanceTarget) { }
