@@ -4,8 +4,9 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 	// Properties
 	// References
-	[SerializeField] private GameCameraController cameraController;
+	[SerializeField] private Blob blob;
 	[SerializeField] private DebrisController debrisController;
+	[SerializeField] private GameCameraController cameraController;
 	[SerializeField] private Paddle[] paddles;
 	private EventManager eventManager;
 
@@ -39,9 +40,8 @@ public class GameController : MonoBehaviour {
 		Time.timeScale = Time.timeScale==0 ? 1 : 0;
 	}
 	private void StartNewGame () {
-		// debrisController!
+		blob.Reset ();
 		debrisController.Reset ();
-		// Paddles!
 		for (int i=0; i<paddles.Length; i++) {
 			paddles[i].Reset (i);
 		}
@@ -64,14 +64,14 @@ public class GameController : MonoBehaviour {
 	private void RegisterButtonInput () {
 		// ENTER = Start a new game
 		if (Input.GetKeyDown (KeyCode.Return)) {
-			ReloadScene ();
+			StartNewGame ();
 		}
 //		// Action Button
 //		else if (InputController.IsButtonDown_Action) {
 //			OnButtonDown_Action ();
 //		}
 		// P = Toggle pause
-		else if (Input.GetKeyDown (KeyCode.P)) {
+		else if (Input.GetKeyDown (KeyCode.Escape)) {
 			TogglePause ();
 		}
 	}

@@ -10,6 +10,9 @@ public class Debri : MonoBehaviour {
 	// Properties
 	private Types type;
 
+	// Getters
+	public Types Type { get { return type; } }
+
 	// ----------------------------------------------------------------
 	//  Initialize
 	// ----------------------------------------------------------------
@@ -25,4 +28,39 @@ public class Debri : MonoBehaviour {
 		this.transform.localPosition = _pos;
 		rigidbody.velocity = _vel;
 	}
+
+	// ----------------------------------------------------------------
+	//  Doers
+	// ----------------------------------------------------------------
+
+	// ----------------------------------------------------------------
+	//  Collisions
+	// ----------------------------------------------------------------
+	private void OnCollisionEnter2D (Collision2D col) {
+		// Debri hit me?
+		if (col.gameObject.layer == LayerMask.NameToLayer(LayerNames.Blob)) {
+			Blob blob = col.gameObject.GetComponent<Blob>();
+			if (blob == null) { Debug.LogError ("Whoa! GO on Blob layer collided with Debri, but it doesn't have a Blob script!"); return; }
+			if (type == Types.Good) {
+				StickToBlob (blob);
+			}
+			// Bad??
+			else {
+				DamageBlob (blob);
+			}
+		}
+	}
+	private void StickToBlob (Blob blob) {
+		this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Blob);
+		rigidbody.bodyType = RigidbodyType2D.Kinematic;
+		rigidbody.velocity = Vector2.zero;
+		rigidbody.angularVelocity = 0;
+		this.transform.SetParent (blob.tf_MyDebris);
+		// TEMP!
+		this.GetComponent<SpriteRenderer>().color = Color.green;
+	}
+	private void DamageBlob (Blob blob) {
+		// TODO: This
+	}
+
 }
