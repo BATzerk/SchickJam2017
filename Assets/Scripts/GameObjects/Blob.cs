@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Blob : MonoBehaviour {
+	// Components
+	[SerializeField] private Transform tf_myDebris;
+	// Properties
 
-	// Use this for initialization
-	void Start () {
-		
+	// Getters
+	public Transform tf_MyDebris { get { return tf_myDebris; } }
+
+
+	// ----------------------------------------------------------------
+	//  Reset
+	// ----------------------------------------------------------------
+	public void Reset () {
+		GameUtils.DestroyAllChildren (tf_myDebris);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+
+
+
+
 }

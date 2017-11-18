@@ -128,6 +128,11 @@ public class GameUtils {
 		em.enabled = isEnabled;
 	}
 
+	public static void DestroyAllChildren (Transform tf) {
+		for (int i=tf.childCount-1; i>=0; --i) {
+			GameObject.Destroy (tf.GetChild(i).gameObject);
+		}
+	}
 
 
 }
