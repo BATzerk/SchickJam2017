@@ -13,7 +13,13 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private PaddleController paddleController;
 	private EventManager eventManager;
 
+	static float score;
+	float highscore = 0;
+
 	[SerializeField] private GameObject viewTitle;
+	[SerializeField] private TextMesh textScore;
+	[SerializeField] private TextMesh textHighScore;
+
 
 	// ----------------------------------------------------------------
 	//  Start / Destroy
@@ -78,6 +84,7 @@ public class GameController : MonoBehaviour {
 				GameOver();
 			}
 		}
+		UpdateScoreView();
 	}
 	private void RegisterButtonInput () {
 		// ENTER = Start a new game
@@ -103,6 +110,23 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	private void UpdateScoreView(){
+
+		score = blob.numOfDebrisCollected;
+
+		if(score >= highscore){
+			highscore = score;
+			textHighScore.color = Color.red;
+			textScore.color = Color.red;
+		}else{
+			// not a new highscore
+			textHighScore.color = Color.white;
+			textScore.color = Color.white;
+		}
+			
+		textScore.text = score.ToString("N0");
+		textHighScore.text = highscore.ToString("N0");
+	}
 
 	void OnEnable()
 	{

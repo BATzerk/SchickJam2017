@@ -15,6 +15,7 @@ public class Blob : MonoBehaviour {
 
 	public float life;
 	const float maxLife = 100;
+	public int numOfDebrisCollected;
 
 	// Getters
 	public Transform tf_MyDebris { get { return tf_myDebris; } }
@@ -24,7 +25,7 @@ public class Blob : MonoBehaviour {
 		float farthestDistance = 2; // have a minimum value.
 		for (int i=0; i<myDebri.Count; i++) {
 			float distance = myDebri[i].transform.localPosition.magnitude;
-			if (farthestDistance < distance) {
+			if (farthestDistance < distance){
 				farthestDistance = distance;
 			}
 		}
@@ -40,6 +41,7 @@ public class Blob : MonoBehaviour {
 		myDebri = new List<Debri>();
 		cachedRadius = 1f;
 		life = maxLife;
+		numOfDebrisCollected = 0;
 	}
 
 
@@ -64,6 +66,7 @@ public class Blob : MonoBehaviour {
 	public void OnDebriAdded (Debri _debri) {
 		myDebri.Add (_debri);
 		UpdateRadius (false);
+		numOfDebrisCollected++;
 	}
 	public void GetHitByDebri (Debri _debri) {
 		AddDestructiveBurst (_debri.transform.localPosition);
