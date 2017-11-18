@@ -4,6 +4,98 @@ using UnityEngine;
 
 public class Paddle : MonoBehaviour {
 	// Constants
+	private const float INPUT_FORCE = 0.003f; // Higher is faster.
+	// Components
+	[SerializeField] private BoxCollider2D bodyCollider; // TODO: Andrew. Make these curved. ( ( ( ( ( ( ( ( ( like that, not like |, like ) not |. <3
+	[SerializeField] private SpriteRenderer bodySprite;
+	// Properties
+	private float distFromCenter;
+	private float loc; // from 0 to 1.
+	private float locVel;
+	private float angleStart,angleEnd; // we lerp between these two with loc.
+	private int index; // 0 or 1. Determines which joystick axis affects me.
+	private int inputDir; // -1 or 1, depending on my index.
+
+
+
+	// ----------------------------------------------------------------
+	//  Reset
+	// ----------------------------------------------------------------
+	public void Reset (int _index) {
+		index = _index;
+
+		loc = 0.5f;
+		locVel = 0;
+		if (index==0) {
+			angleStart = -Mathf.PI*0.5f;
+			angleEnd = Mathf.PI*0.5f;
+		}
+		else {
+			angleStart = Mathf.PI*1.5f;
+			angleEnd = Mathf.PI*0.5f;
+		}
+
+		// Set my properties, kween!
+		SetSize (new Vector2(0.2f, 1.4f));
+		distFromCenter = 2; // TODO: Increase this as our blob size increases.
+	}
+
+
+	// ----------------------------------------------------------------
+	//  Doers
+	// ----------------------------------------------------------------
+	/** Sizes the collider and sprite. */
+	private void SetSize (Vector2 _size) {
+		bodyCollider.size = _size;
+//		GameUtils.SizeSprite (bodySprite, _size.x,_size.y);
+		bodySprite.transform.localScale = _size * 100f; // Hack. Idk why it's too small.
+	}
+
+
+	// ----------------------------------------------------------------
+	//  Update
+	// ----------------------------------------------------------------
+	private void Update () {
+		UpdateLocVel ();
+		ApplyLocVel ();
+		ApplyBounds ();
+	}
+	private void UpdateLocVel () {
+		if (InputController.JoystickAxes == null) { return; } // So we can recompile without an error.
+		// What's our joystick look like?
+		Vector2 inputAxis = InputController.JoystickAxes[index];
+		// Hit me!
+		locVel += inputAxis.y * INPUT_FORCE;
+	}
+	private void ApplyLocVel () {
+		loc += locVel;
+		locVel *= 0.9f;
+		// Great! Position/rotate me!
+		float angle = Mathf.Lerp(angleStart, angleEnd, loc);
+		this.transform.localPosition = new Vector3 (Mathf.Cos(angle)*distFromCenter, Mathf.Sin(angle)*distFromCenter);
+		this.transform.localEulerAngles = new Vector3 (0, 0, angle*Mathf.Rad2Deg);
+	}
+	private void ApplyBounds () {
+		if (loc<0) {
+			loc = 0;
+			locVel *= -0.9f;
+		}
+		else if (loc>1) {
+			loc = 1;
+			locVel *= -0.9f;
+		}
+	}
+
+
+}
+
+/*
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Paddle : MonoBehaviour {
+	// Constants
 	private const float POS_EASING = 5f; // Higher is slower.
 	// Components
 	[SerializeField] private BoxCollider2D bodyCollider; // TODO: Andrew. Make these curved. ( ( ( ( ( ( ( ( ( like that, not like |, like ) not |. <3
@@ -33,10 +125,10 @@ public class Paddle : MonoBehaviour {
 	// ----------------------------------------------------------------
 	//  Doers
 	// ----------------------------------------------------------------
-	/** Sizes the collider and sprite. */
+	/** Sizes the collider and sprite. * /
 	private void SetSize (Vector2 _size) {
 		bodyCollider.size = _size;
-//		GameUtils.SizeSprite (bodySprite, _size.x,_size.y);
+		//		GameUtils.SizeSprite (bodySprite, _size.x,_size.y);
 		bodySprite.transform.localScale = _size * 100f; // Hack. Idk why it's too small.
 	}
 
@@ -81,5 +173,7 @@ public class Paddle : MonoBehaviour {
 	}
 
 
-}
+	}
 
+
+*/
