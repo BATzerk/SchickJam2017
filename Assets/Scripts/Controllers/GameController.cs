@@ -5,11 +5,11 @@ public class GameController : MonoBehaviour {
 	// Properties
 	// References
 	[SerializeField] private GameCameraController cameraController;
-	[SerializeField] private Player player;
+	[SerializeField] private Paddle[] paddles;
 	private EventManager eventManager;
 
 	// Getters / Setters
-	public Player Player { get { return player; } }
+//	public Player Player { get { return player; } }
 
 
 
@@ -22,6 +22,8 @@ public class GameController : MonoBehaviour {
 
 		// Reset things!
 		eventManager = GameManagers.Instance.EventManager;
+
+		StartNewGame ();
 	}
 
 
@@ -34,6 +36,12 @@ public class GameController : MonoBehaviour {
 	}
 	private void TogglePause () {
 		Time.timeScale = Time.timeScale==0 ? 1 : 0;
+	}
+	private void StartNewGame () {
+		// Make paddles!
+		for (int i=0; i<paddles.Length; i++) {
+			paddles[i].Reset (i);
+		}
 	}
 
 
@@ -55,18 +63,14 @@ public class GameController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Return)) {
 			ReloadScene ();
 		}
-		// Action Button
-		else if (InputController.IsButtonDown_Action) {
-			OnButtonDown_Action ();
-		}
+//		// Action Button
+//		else if (InputController.IsButtonDown_Action) {
+//			OnButtonDown_Action ();
+//		}
 		// P = Toggle pause
 		else if (Input.GetKeyDown (KeyCode.P)) {
 			TogglePause ();
 		}
-	}
-
-	private void OnButtonDown_Action () {
-		
 	}
 
 

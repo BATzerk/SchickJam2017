@@ -13,7 +13,7 @@ public class GameCameraController : MonoBehaviour {
 
 	// Getters
 	private float frameTimeScaleUnscaled { get { return TimeController.FrameTimeScaleUnscaled; } }
-	private Vector3 playerPos { get { return gameControllerRef.Player.transform.localPosition; } }
+//	private Vector3 playerPos { get { return gameControllerRef.Player.transform.localPosition; } }
 	// Getters / Setters
 	private Vector2 pos {
 		get { return this.transform.localPosition; }
@@ -38,17 +38,17 @@ public class GameCameraController : MonoBehaviour {
 	// ----------------------------------------------------------------
 	//  Update
 	// ----------------------------------------------------------------
-	private void Update () {
-		UpdatePosTarget ();
-		UpdatePos ();
-	}
-
-	private void UpdatePosTarget () {
-		pos_target = playerPos;
-	}
-	private void UpdatePos () {
-		pos += (pos_target-pos) / easing_pos;
-	}
+//	private void Update () {
+//		UpdatePosTarget ();
+//		UpdatePos ();
+//	}
+//
+//	private void UpdatePosTarget () {
+//		pos_target = playerPos;
+//	}
+//	private void UpdatePos () {
+//		pos += (pos_target-pos) / easing_pos;
+//	}
 
 
 }
