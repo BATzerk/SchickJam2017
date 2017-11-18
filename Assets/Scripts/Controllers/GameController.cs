@@ -64,7 +64,7 @@ public class GameController : MonoBehaviour {
 	private void RegisterButtonInput () {
 		// ENTER = Start a new game
 		if (Input.GetKeyDown (KeyCode.Return)) {
-			StartNewGame ();
+			ReloadScene ();
 		}
 //		// Action Button
 //		else if (InputController.IsButtonDown_Action) {
