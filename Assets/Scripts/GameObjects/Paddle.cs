@@ -7,10 +7,13 @@ using UnityEngine.EventSystems;
 
 public class Paddle : MonoBehaviour {
 	// Constants
-	private const float INPUT_FORCE = 0.003f; // Higher is faster.
+	private const float INPUT_FORCE = 0.01f; // Higher is faster.
 	// Components
-	[SerializeField] private BoxCollider2D bodyCollider; // TODO: Andrew. Make these curved. ( ( ( ( ( ( ( ( ( like that, not like |, like ) not |. <3
-	[SerializeField] private SpriteRenderer bodySprite;
+	[SerializeField] private BoxCollider2D handCollider; // TODO: Andrew. Make these curved. ( ( ( ( ( ( ( ( ( like that, not like |, like ) not |. <3
+	[SerializeField] private SpriteRenderer handSprite;
+	[SerializeField] private BoxCollider2D armCollider;
+	[SerializeField] private SpriteRenderer armSprite;
+
 	// References
 	[SerializeField] private PaddleController paddleController;
 	// Properties
@@ -53,9 +56,9 @@ public class Paddle : MonoBehaviour {
 	// ----------------------------------------------------------------
 	/** Sizes the collider and sprite. */
 	private void SetSize (Vector2 _size) {
-		bodyCollider.size = _size;
+		handCollider.size = _size;
 //		GameUtils.SizeSprite (bodySprite, _size.x,_size.y);
-		bodySprite.transform.localScale = _size * 100f; // Hack. Idk why it's too small.
+		handSprite.transform.localScale = _size * 100f; // Hack. Idk why it's too small.
 	}
 
 
@@ -63,6 +66,7 @@ public class Paddle : MonoBehaviour {
 	//  Update
 	// ----------------------------------------------------------------
 	private void Update () {
+		if (InputController.JoystickAxes == null) { return; } // So we can recompile without an error.
 		UpdateLocVel ();
 		ApplyLocVel ();
 		ApplyBounds ();
@@ -70,7 +74,6 @@ public class Paddle : MonoBehaviour {
 		WaitingForPlayerInput();
 	}
 	private void UpdateLocVel () {
-		if (InputController.JoystickAxes == null) { return; } // So we can recompile without an error.
 		// What's our joystick look like?
 		Vector2 inputAxis = InputController.JoystickAxes[index];
 		// Make u-turns faster!
@@ -78,15 +81,32 @@ public class Paddle : MonoBehaviour {
 			locVel *= 0f;
 		}
 		// Hit me!
-		locVel += inputAxis.y * INPUT_FORCE;
+		float sizeSpeedScale = (7+distFromCenter)*0.125f; // slow down the movement ever so slightly the bigger we get.
+		locVel += inputAxis.y * INPUT_FORCE / sizeSpeedScale;
 
 	}
 	private void ApplyLocVel () {
 		loc += locVel;
-		locVel *= 0.9f;
+		// Friction! Different if input or not.
+//		Vector2 inputAxis = InputController.JoystickAxes[index];
+//		if (inputAxis.y != 0) {
+//			locVel *= 0.92f;
+//		}
+//		else {
+			locVel *= 0.7f;
+//		}
 		// Great! Position/rotate me!
 		float angle = Mathf.Lerp(angleStart, angleEnd, loc);
-		this.transform.localPosition = new Vector3 (Mathf.Cos(angle)*distFromCenter, Mathf.Sin(angle)*distFromCenter);
+//		Vector2 handPos = new Vector3 (Mathf.Cos(angle)*distFromCenter, Mathf.Sin(angle)*distFromCenter);
+		Vector2 armSize = new Vector2(distFromCenter, 0.1f);
+
+		handSprite.transform.localPosition = new Vector3(distFromCenter, 0, 0);
+		handCollider.transform.localPosition = new Vector3(distFromCenter, 0, 0);
+		armSprite.transform.localPosition = new Vector3(distFromCenter*0.5f, 0, 0);
+		armCollider.transform.localPosition = new Vector3(distFromCenter*0.5f, 0, 0);
+		GameUtils.SizeSprite (armSprite, armSize.x,armSize.y);
+		armCollider.size = armSize;
+
 		this.transform.localEulerAngles = new Vector3 (0, 0, angle*Mathf.Rad2Deg);
 	}
 	private void ApplyBounds () {
