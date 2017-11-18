@@ -2,16 +2,12 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-	// Properties
 	// References
 	[SerializeField] private Blob blob;
 	[SerializeField] private DebrisController debrisController;
 	[SerializeField] private GameCameraController cameraController;
-	[SerializeField] private Paddle[] paddles;
+	[SerializeField] private PaddleController paddleController;
 	private EventManager eventManager;
-
-	// Getters / Setters
-//	public Player Player { get { return player; } }
 
 
 
@@ -42,16 +38,9 @@ public class GameController : MonoBehaviour {
 	private void StartNewGame () {
 		blob.Reset ();
 		debrisController.Reset ();
-		for (int i=0; i<paddles.Length; i++) {
-			paddles[i].Reset (i);
-		}
+		paddleController.Reset ();
 	}
 
-
-
-	// ----------------------------------------------------------------
-	//  Events
-	// ----------------------------------------------------------------
 
 
 
