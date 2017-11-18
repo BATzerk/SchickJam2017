@@ -66,6 +66,10 @@ public class Paddle : MonoBehaviour {
 		if (InputController.JoystickAxes == null) { return; } // So we can recompile without an error.
 		// What's our joystick look like?
 		Vector2 inputAxis = InputController.JoystickAxes[index];
+		// Make u-turns faster!
+		if (inputAxis.y!=0 && GameMathUtils.Sign(inputAxis.y) != GameMathUtils.Sign(locVel)) {
+			locVel *= 0f;
+		}
 		// Hit me!
 		locVel += inputAxis.y * INPUT_FORCE;
 	}

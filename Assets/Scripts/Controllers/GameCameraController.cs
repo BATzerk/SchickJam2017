@@ -3,11 +3,13 @@ using System.Collections;
 
 public class GameCameraController : MonoBehaviour {
 	// Settables
-	private float easing_pos = 2f; // HIGHER is SLOWER. Lower is snappier.
+	private float easing_zoom = 140f; // HIGHER is SLOWER. Lower is snappier.
+	// Components
+	[SerializeField] Camera camera;
 	// Properties
-	private float zoomAmount;
-	private float zoomAmount_target;
-	private Vector2 pos_target;
+	private float zoomScale;
+	private float zoomScale_target;
+//	private Vector2 pos_target;
 	// References
 	[SerializeField] private GameController gameControllerRef;
 
@@ -33,23 +35,30 @@ public class GameCameraController : MonoBehaviour {
 		// Remove event listeners!
 //		GameManagers.Instance.EventManager.GameViewChangedEvent -= OnGameViewChanged;
 	}
+	public void Reset () {
+		zoomScale = zoomScale_target = 1;
+	}
 
 
 	// ----------------------------------------------------------------
 	//  Update
 	// ----------------------------------------------------------------
-//	private void Update () {
-//		UpdatePosTarget ();
-//		UpdatePos ();
-//	}
-//
-//	private void UpdatePosTarget () {
-//		pos_target = playerPos;
-//	}
-//	private void UpdatePos () {
-//		pos += (pos_target-pos) / easing_pos;
-//	}
+	private void Update () {
+		UpdateZoom ();
+		ApplyZoom ();
+	}
 
+	private void UpdateZoom () {
+		zoomScale += (zoomScale_target-zoomScale) / easing_zoom;
+	}
+	private void ApplyZoom () {
+		camera.orthographicSize = 5*zoomScale;
+	}
+
+
+	public void UpdateZoomScaleTarget (float blobRadius) {
+		zoomScale_target = Mathf.Max (1, blobRadius*0.4f); // TODO balance this right
+	}
 
 }
 

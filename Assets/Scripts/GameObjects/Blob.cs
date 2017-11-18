@@ -5,13 +5,18 @@ using UnityEngine;
 public class Blob : MonoBehaviour {
 	// Components
 	[SerializeField] private Transform tf_myDebris;
+	// Properties
+	private float cachedRadius;
 	// References
+	[SerializeField] private GameObject prefabGO_destructiveBurst;
+	[SerializeField] private GameCameraController cameraController;
 	[SerializeField] private PaddleController paddleController;
 	private List<Debri> myDebri; // all the Schick that's stuck to me! Schickhead!
 
 	// Getters
 	public Transform tf_MyDebris { get { return tf_myDebris; } }
-	public float CalculateRadius () {
+	public float CachedRadius { get { return cachedRadius; } }
+	private float CalculateRadius () {
 		// Go through all my children and find who's the farthest from my center!
 		float farthestDistance = 2; // have a minimum value.
 		for (int i=0; i<myDebri.Count; i++) {
@@ -30,6 +35,22 @@ public class Blob : MonoBehaviour {
 	public void Reset () {
 		GameUtils.DestroyAllChildren (tf_myDebris);
 		myDebri = new List<Debri>();
+		cachedRadius = 1f;
+	}
+
+
+	private void UpdateRadius (bool canShrinkDistance) {
+		cachedRadius = CalculateRadius ();
+		paddleController.UpdatePaddleDistanceTarget (cachedRadius, canShrinkDistance);
+		cameraController.UpdateZoomScaleTarget (cachedRadius);
+	}
+	private void BlowUpDebriInArea (Vector2 pos, float radius) {
+		for (int i=myDebri.Count-1; i>=0; --i) {
+			float dist = Vector2.Distance (pos, myDebri[i].transform.localPosition);
+			if (dist<radius) {
+				RemoveDebri (myDebri[i], false);
+			}
+		}
 	}
 
 
@@ -38,12 +59,30 @@ public class Blob : MonoBehaviour {
 	// ----------------------------------------------------------------
 	public void OnDebriAdded (Debri _debri) {
 		myDebri.Add (_debri);
-		paddleController.UpdatePaddleDistanceTarget (false);
+		UpdateRadius (false);
 	}
 	public void GetHitByDebri (Debri _debri) {
-		// TODO: This.
-		//		OnDebriRemoved (this);
-		paddleController.UpdatePaddleDistanceTarget (true);
+		AddDestructiveBurst (_debri.transform.localPosition);
+		Destroy (_debri.gameObject);
+	}
+	private void AddDestructiveBurst (Vector2 pos) {
+		DestructiveBurst burst = Instantiate(prefabGO_destructiveBurst).GetComponent<DestructiveBurst>();
+		float burstRadius = cachedRadius * 0.6f; // the bigger I am, the bigger the blast radius is!
+		burst.Initialize (this.transform, pos, burstRadius);
+		BlowUpDebriInArea (pos, burstRadius);
+	}
+	private void RemoveDebri (Debri _debri, bool doUpdateRadius) {
+		if (!myDebri.Contains(_debri)) {
+			Debug.LogError ("Trying to remove a Debri that's not in the Blob's list of Debri!");
+			return;
+		}
+		// Destroy dis bad boy!
+		_debri.BlowUp ();
+		// Remove from my liiist.
+		myDebri.Remove (_debri);
+		if (doUpdateRadius) {
+			UpdateRadius (true);
+		}
 	}
 
 
@@ -51,7 +90,7 @@ public class Blob : MonoBehaviour {
 	//  Update
 	// ----------------------------------------------------------------
 	private void FixedUpdate () {
-		this.transform.localEulerAngles = new Vector3 (0, 0, Time.time*5f);
+		this.transform.localEulerAngles = new Vector3 (0, 0, Mathf.Sin (Time.time*1f)*20f);
 	}
 
 

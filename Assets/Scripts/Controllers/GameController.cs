@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour {
 		Time.timeScale = Time.timeScale==0 ? 1 : 0;
 	}
 	private void StartNewGame () {
+		cameraController.Reset ();
 		blob.Reset ();
 		debrisController.Reset ();
 		paddleController.Reset ();

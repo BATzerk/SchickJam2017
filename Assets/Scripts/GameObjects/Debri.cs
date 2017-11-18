@@ -81,7 +81,7 @@ public class Debri : MonoBehaviour {
 		this.transform.SetParent (myBlob.tf_MyDebris);
 		SpringJoint2D springJoint = gameObject.AddComponent<SpringJoint2D>();
 		springJoint.autoConfigureDistance = false;
-		springJoint.distance = Vector2.Distance(this.gameObject.transform.localPosition, col.gameObject.transform.localPosition) * 1f;
+		springJoint.distance = Vector2.Distance(this.gameObject.transform.localPosition, col.gameObject.transform.localPosition) * 1.2f;
 		springJoint.connectedBody = col.rigidbody;
 
 		// TEMP!
@@ -95,12 +95,17 @@ public class Debri : MonoBehaviour {
 		// Am I on the Blob?? Then do nothin'!
 		if (myBlob != null) { return; }
 		// If I'm bad, then blow me right up!
-		if (type == Types.Bad) {
+//		if (type == Types.Bad) {
 			// TODO: Particle fx.
 			Destroy (gameObject);
-		}
+//		}
 
 		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_PADDLE_HIT);
+	}
+
+	public void BlowUp () {
+		// TODO: Unify this with hitting the paddle?
+		Destroy (gameObject);
 	}
 
 }
