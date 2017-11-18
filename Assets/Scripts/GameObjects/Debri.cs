@@ -65,13 +65,14 @@ public class Debri : MonoBehaviour {
 
 		// TEMP!
 		this.GetComponent<SpriteRenderer>().color = Color.green;
+		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_CORE_HIT, 0.6f);
 	}
 	private void DamageBlob (Blob blob) {
 		// TODO: This
 	}
 
 	private void HitPaddle(){
-
+		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_PADDLE_HIT);
 		Destroy(gameObject);
 		/*this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Blob);
 		rigidbody.bodyType = RigidbodyType2D.Kinematic;

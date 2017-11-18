@@ -25,6 +25,7 @@ public class GameController : MonoBehaviour {
 		// Reset things!
 		eventManager = GameManagers.Instance.EventManager;
 
+
 		StartNewGame ();
 	}
 
@@ -45,6 +46,9 @@ public class GameController : MonoBehaviour {
 		for (int i=0; i<paddles.Length; i++) {
 			paddles[i].Reset (i);
 		}
+
+		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1);
+
 	}
 
 
