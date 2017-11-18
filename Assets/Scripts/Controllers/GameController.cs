@@ -5,6 +5,7 @@ public class GameController : MonoBehaviour {
 	// Properties
 	// References
 	[SerializeField] private GameCameraController cameraController;
+	[SerializeField] private DebrisController debrisController;
 	[SerializeField] private Paddle[] paddles;
 	private EventManager eventManager;
 
@@ -38,7 +39,9 @@ public class GameController : MonoBehaviour {
 		Time.timeScale = Time.timeScale==0 ? 1 : 0;
 	}
 	private void StartNewGame () {
-		// Make paddles!
+		// debrisController!
+		debrisController.Reset ();
+		// Paddles!
 		for (int i=0; i<paddles.Length; i++) {
 			paddles[i].Reset (i);
 		}

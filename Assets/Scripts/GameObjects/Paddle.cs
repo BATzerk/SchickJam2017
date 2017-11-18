@@ -16,7 +16,6 @@ public class Paddle : MonoBehaviour {
 
 
 
-
 	// ----------------------------------------------------------------
 	//  Reset
 	// ----------------------------------------------------------------
@@ -26,7 +25,7 @@ public class Paddle : MonoBehaviour {
 		angleFromCenter = targetAngleFromCenter = Mathf.PI*_index; // just default these to some angle.
 
 		// Set my properties, kween!
-		SetSize (new Vector2(20, 140));
+		SetSize (new Vector2(0.2f, 1.4f));
 		distFromCenter = 2 + index*0.3f;
 	}
 
@@ -38,7 +37,7 @@ public class Paddle : MonoBehaviour {
 	private void SetSize (Vector2 _size) {
 		bodyCollider.size = _size;
 //		GameUtils.SizeSprite (bodySprite, _size.x,_size.y);
-		bodySprite.transform.localScale = _size;
+		bodySprite.transform.localScale = _size * 100f; // Hack. Idk why it's too small.
 	}
 
 
