@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DebrisController : MonoBehaviour {
 	// Properties
-	private float spawnInterval = 0.1f; // in SECONDS.
+	private float spawnInterval = 1.2f; // in SECONDS.
 	private float timeUntilSpawnDebri;
 	// References
 	[SerializeField] private Transform tf_debris;
@@ -31,7 +31,7 @@ public class DebrisController : MonoBehaviour {
 		float posAngle = Random.Range(-Mathf.PI, Mathf.PI);
 		float velAngle = -posAngle;
 //		velAngle += Random.Range(-0.3f, 0.3f); // QQQ vary up the direction it's heading in a bit, so it's not 100% going to the center.
-		const float spawnRadius = 5f;
+		const float spawnRadius = 10f;
 		const float absVel = 2f;
 		Vector2 pos = new Vector2(Mathf.Cos(posAngle)*spawnRadius, Mathf.Sin(posAngle)*spawnRadius);
 		Vector2 vel = new Vector2(-Mathf.Cos(velAngle)*absVel, Mathf.Sin(velAngle)*absVel);

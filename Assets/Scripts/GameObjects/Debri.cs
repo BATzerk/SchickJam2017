@@ -9,6 +9,7 @@ public class Debri : MonoBehaviour {
 	[SerializeField] private Rigidbody2D rigidbody;
 	// Properties
 	private Types type;
+	private Blob blob;
 
 	// Getters
 	public Types Type { get { return type; } }
@@ -40,7 +41,7 @@ public class Debri : MonoBehaviour {
 		// Debri hit me?
 		if (col.gameObject.layer == LayerMask.NameToLayer(LayerNames.Blob)) {
 			Blob blob = col.gameObject.GetComponent<Blob>();
-			if (blob == null) { Debug.LogError ("Whoa! GO on Blob layer collided with Debri, but it doesn't have a Blob script!"); return; }
+			if (blob == null) { Debug.LogError ("Whoa! GO on Blob layer collided with Debri, but it doesn't have a Blob script!"); }
 			if (type == Types.Good) {
 				StickToBlob (blob);
 			}
@@ -49,18 +50,38 @@ public class Debri : MonoBehaviour {
 				DamageBlob (blob);
 			}
 		}
+
+		if (col.gameObject.layer == LayerMask.NameToLayer(LayerNames.Paddle)) {
+
+			HitPaddle();
+		}
 	}
-	private void StickToBlob (Blob blob) {
+	private void StickToBlob (Blob blob = null) {
 		this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Blob);
 		rigidbody.bodyType = RigidbodyType2D.Kinematic;
 		rigidbody.velocity = Vector2.zero;
 		rigidbody.angularVelocity = 0;
-		this.transform.SetParent (blob.tf_MyDebris);
+		//this.transform.SetParent (blob.tf_MyDebris);
+
 		// TEMP!
 		this.GetComponent<SpriteRenderer>().color = Color.green;
 	}
 	private void DamageBlob (Blob blob) {
 		// TODO: This
+	}
+
+	private void HitPaddle(){
+
+		Destroy(gameObject);
+		/*this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Blob);
+		rigidbody.bodyType = RigidbodyType2D.Kinematic;
+		rigidbody.velocity = rigidbody.velocity * -1 * 10f;
+		rigidbody.angularVelocity = 0;
+		*/
+
+		/*Vector2 knockbackVelocity = 
+		new Vector2((transform.position.x - player.transform.position.x) * forceMultiplier, (transform.position.y - player.transform.position.y) * forceMultiplier);
+		rigidbody.GetComponent<Rigidbody2D>().velocity = -knockbackVelocity;*/
 	}
 
 }
