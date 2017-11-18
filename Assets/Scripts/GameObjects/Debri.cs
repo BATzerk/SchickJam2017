@@ -28,6 +28,11 @@ public class Debri : MonoBehaviour {
 		type = _type;
 		this.transform.localPosition = _pos;
 		rigidbody.velocity = _vel;
+
+		if(type == Types.Bad){
+
+			this.GetComponent<SpriteRenderer>().color = Color.red;
+		}
 	}
 
 	// ----------------------------------------------------------------

@@ -36,7 +36,17 @@ public class DebrisController : MonoBehaviour {
 		Vector2 pos = new Vector2(Mathf.Cos(posAngle)*spawnRadius, Mathf.Sin(posAngle)*spawnRadius);
 		Vector2 vel = new Vector2(-Mathf.Cos(velAngle)*absVel, Mathf.Sin(velAngle)*absVel);
 		Debri newObj = Instantiate(prefabGO_debri).GetComponent<Debri>();
-		newObj.Initialize (tf_debris, pos, vel, Debri.Types.Good);
+
+
+		float rad =  Random.Range(0,100);
+		if(rad < 40){
+			newObj.Initialize (tf_debris, pos, vel, Debri.Types.Good);
+		}else{
+			newObj.Initialize (tf_debris, pos, vel, Debri.Types.Bad);
+		}
+
+	
+
 		// Reset values
 		timeUntilSpawnDebri = spawnInterval;
 	}
