@@ -86,6 +86,7 @@ public class Debri : MonoBehaviour {
 
 		// TEMP!
 		this.GetComponent<SpriteRenderer>().color = Color.green;
+		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_CORE_HIT, 0.6f);
 	}
 	private void DamageBlob (Blob blob) {
 		blob.GetHitByDebri (this);

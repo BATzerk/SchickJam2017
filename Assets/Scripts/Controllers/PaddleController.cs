@@ -46,6 +46,5 @@ public class PaddleController : MonoBehaviour {
 		// Ease paddleDistance!
 		paddleDistance += (paddleDistanceTarget-paddleDistance) / 24f;
 	}
-
-
+		
 }

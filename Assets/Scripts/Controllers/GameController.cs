@@ -2,6 +2,10 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
+
+	public enum GameState { GAMEOVER, PLAYING }
+	static public GameState gameState = GameState.GAMEOVER;
+
 	// References
 	[SerializeField] private Blob blob;
 	[SerializeField] private DebrisController debrisController;
@@ -9,17 +13,21 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private PaddleController paddleController;
 	private EventManager eventManager;
 
-
+	[SerializeField] private GameObject viewTitle;
 
 	// ----------------------------------------------------------------
 	//  Start / Destroy
 	// ----------------------------------------------------------------
 	private void Start () {
+
+
 		// Set application values
 		Application.targetFrameRate = GameProperties.TARGET_FRAME_RATE;
 
 		// Reset things!
 		eventManager = GameManagers.Instance.EventManager;
+
+
 
 		StartNewGame ();
 	}
@@ -43,6 +51,18 @@ public class GameController : MonoBehaviour {
 	}
 
 
+	/*
+	 * Wait for player input to start
+	 * If red hits core game overs
+	 * game over has time out before next round starts 3 seconds.
+	 * Highscore??
+	 */
+	public void GameOver(){
+
+		gameState = GameState.GAMEOVER;
+		viewTitle.SetActive( true);
+		// Delay then restart
+	}
 
 
 	// ----------------------------------------------------------------
@@ -50,6 +70,13 @@ public class GameController : MonoBehaviour {
 	// ----------------------------------------------------------------
 	private void Update () {
 		RegisterButtonInput ();
+
+		if(blob.life <= 0){
+			// GameOver!
+			if(gameState == GameState.PLAYING){
+				GameOver();
+			}
+		}
 	}
 	private void RegisterButtonInput () {
 		// ENTER = Start a new game
@@ -66,11 +93,27 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	private void PlayerInput(){
+
+		if(gameState == GameState.GAMEOVER){
+			StartNewGame();
+			viewTitle.SetActive(false);
+			gameState =  GameState.PLAYING;
+		}
+	}
 
 
+	void OnEnable()
+	{
+		Paddle.OnPlayerInput += PlayerInput;
+
+	}
 
 
-
+	void OnDisable()
+	{
+		Paddle.OnPlayerInput -= PlayerInput;
+	}
 }
 
 

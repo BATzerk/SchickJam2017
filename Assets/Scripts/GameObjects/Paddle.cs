@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class Paddle : MonoBehaviour {
 	// Constants
@@ -20,6 +23,8 @@ public class Paddle : MonoBehaviour {
 	// Getters
 	private float distFromCenter { get { return paddleController.PaddleDistance; } }
 
+	// Event
+	public static Action OnPlayerInput;
 
 	// ----------------------------------------------------------------
 	//  Reset
@@ -61,6 +66,8 @@ public class Paddle : MonoBehaviour {
 		UpdateLocVel ();
 		ApplyLocVel ();
 		ApplyBounds ();
+
+		WaitingForPlayerInput();
 	}
 	private void UpdateLocVel () {
 		if (InputController.JoystickAxes == null) { return; } // So we can recompile without an error.
@@ -68,6 +75,7 @@ public class Paddle : MonoBehaviour {
 		Vector2 inputAxis = InputController.JoystickAxes[index];
 		// Hit me!
 		locVel += inputAxis.y * INPUT_FORCE;
+
 	}
 	private void ApplyLocVel () {
 		loc += locVel;
@@ -88,7 +96,17 @@ public class Paddle : MonoBehaviour {
 		}
 	}
 
+	private bool WaitingForPlayerInput(){
 
+		if (InputController.JoystickAxes == null) {  return false; } // So we can recompile without an error.
+		Vector2 inputAxis = InputController.JoystickAxes[index];
+
+		if(Mathf.Abs( inputAxis.y )  > 0.8f){
+			OnPlayerInput();
+		}
+
+		return false;
+	}
 }
 
 /*

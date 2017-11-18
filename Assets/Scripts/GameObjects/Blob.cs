@@ -23,6 +23,8 @@ public class Blob : MonoBehaviour {
 		return farthestDistance;
 	}
 
+	public float life;
+	const float maxlife = 100;
 
 	// ----------------------------------------------------------------
 	//  Reset
@@ -30,6 +32,7 @@ public class Blob : MonoBehaviour {
 	public void Reset () {
 		GameUtils.DestroyAllChildren (tf_myDebris);
 		myDebri = new List<Debri>();
+		life = maxlife;
 	}
 
 
@@ -44,6 +47,7 @@ public class Blob : MonoBehaviour {
 		// TODO: This.
 		//		OnDebriRemoved (this);
 		paddleController.UpdatePaddleDistanceTarget (true);
+		life -= 100;
 	}
 
 
@@ -52,6 +56,8 @@ public class Blob : MonoBehaviour {
 	// ----------------------------------------------------------------
 	private void FixedUpdate () {
 		this.transform.localEulerAngles = new Vector3 (0, 0, Time.time*5f);
+
+
 	}
 
 
