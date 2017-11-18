@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class DebrisController : MonoBehaviour {
 	// Properties
-	private float spawnInterval = 0.2f; // in SECONDS.
-	private float timeUntilSpawnDebri;
+//	private float spawnInterval = 0.2f; // in SECONDS.
+	private float timeUntilSpawnGood;
+	private float timeUntilSpawnBad;
 	// References
 	[SerializeField] private Blob blob;
+	[SerializeField] private GameController gameController;
 	[SerializeField] private GameObject prefabGO_debri;
 	[SerializeField] private Transform tf_debris;
 
@@ -20,14 +22,15 @@ public class DebrisController : MonoBehaviour {
 		GameUtils.DestroyAllChildren (tf_debris);
 
 		// Reset values.
-		timeUntilSpawnDebri = spawnInterval;
+		timeUntilSpawnBad = 3f;
+		timeUntilSpawnGood = 0f;
 	}
 
 
 	// ----------------------------------------------------------------
 	//  Update
 	// ----------------------------------------------------------------
-	private void SpawnDebri () {
+	private void SpawnDebri (Debri.Types type) {
 		// Position and vel!
 		float posAngle = Random.Range(-Mathf.PI, Mathf.PI);
 		float velAngle = -posAngle;
@@ -38,18 +41,15 @@ public class DebrisController : MonoBehaviour {
 		Vector2 vel = new Vector2(-Mathf.Cos(velAngle)*absVel, Mathf.Sin(velAngle)*absVel);
 		Debri newObj = Instantiate(prefabGO_debri).GetComponent<Debri>();
 
-
-		float rad =  Random.Range(0,100);
-		if(rad < 12) {
-			newObj.Initialize (tf_debris, pos, vel, Debri.Types.Bad);
-		}else{
-			newObj.Initialize (tf_debris, pos, vel, Debri.Types.Good);
-		}
-
-	
+		newObj.Initialize (tf_debris, pos, vel, type);
 
 		// Reset values
-		timeUntilSpawnDebri = spawnInterval;
+		if (type==Debri.Types.Good) {
+			timeUntilSpawnGood = 0.2f;
+		}
+		else {
+			timeUntilSpawnBad = Random.Range (0.5f, 2f);
+		}
 	}
 
 
@@ -57,14 +57,22 @@ public class DebrisController : MonoBehaviour {
 	//  Update
 	// ----------------------------------------------------------------
 	private void Update () {
-		timeUntilSpawnDebri -= Time.deltaTime;
-		if (timeUntilSpawnDebri <= 0) {
-			SpawnDebri ();
+		// Game over? Don't spawn no more.
+		if (gameController.IsGameOver) { return; }
+
+		timeUntilSpawnGood -= Time.deltaTime;
+		timeUntilSpawnBad -= Time.deltaTime;
+		if (timeUntilSpawnGood <= 0) {
+			SpawnDebri (Debri.Types.Good);
 		}
-		// QQQ TESTING
+		if (timeUntilSpawnBad <= 0) {
+			SpawnDebri (Debri.Types.Bad);
+		}
+
+		// TEMP TESTING
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			for (int i=0; i<10; i++) {
-				SpawnDebri ();
+				SpawnDebri (Debri.Types.Good);
 			}
 		}
 	}

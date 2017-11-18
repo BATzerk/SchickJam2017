@@ -10,24 +10,23 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private Blob blob;
 	[SerializeField] private DebrisController debrisController;
 	[SerializeField] private GameCameraController cameraController;
+	[SerializeField] private GameObject viewTitle;
 	[SerializeField] private PaddleController paddleController;
 	private EventManager eventManager;
 
-	[SerializeField] private GameObject viewTitle;
+	// Getters
+	public bool IsGameOver { get { return gameState==GameState.GAMEOVER; } }
+
 
 	// ----------------------------------------------------------------
 	//  Start / Destroy
 	// ----------------------------------------------------------------
 	private void Start () {
-
-
 		// Set application values
 		Application.targetFrameRate = GameProperties.TARGET_FRAME_RATE;
 
 		// Reset things!
 		eventManager = GameManagers.Instance.EventManager;
-
-
 
 		StartNewGame ();
 	}

@@ -69,6 +69,12 @@ public class Debri : MonoBehaviour {
 			OnHitPaddle ();
 		}
 	}
+	private void OnTriggerEnter2D (Collider2D col) {
+		// If I'm a baddie, nix me!!
+		if (type==Types.Bad && col.gameObject.layer == LayerMask.NameToLayer(LayerNames.Paddle)) {
+			OnHitPaddle ();
+		}
+	}
 	private void StickToBlob (Blob _blob, Collision2D col) {
 		myBlob = _blob;
 		myBlob.OnDebriAdded (this);
