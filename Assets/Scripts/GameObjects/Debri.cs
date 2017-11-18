@@ -9,7 +9,7 @@ public class Debri : MonoBehaviour {
 	[SerializeField] private Rigidbody2D rigidbody;
 	// Properties
 	private Types type;
-	private Blob blob;
+	private Blob myBlob;
 
 	// Getters
 	public Types Type { get { return type; } }
@@ -30,7 +30,6 @@ public class Debri : MonoBehaviour {
 		rigidbody.velocity = _vel;
 
 		if(type == Types.Bad){
-
 			this.GetComponent<SpriteRenderer>().color = Color.red;
 		}
 	}
@@ -42,13 +41,23 @@ public class Debri : MonoBehaviour {
 	// ----------------------------------------------------------------
 	//  Collisions
 	// ----------------------------------------------------------------
+	private Blob GetBlobFromGO(GameObject go) {
+		// The thing itself is a Blob!
+		Blob blob = go.GetComponent<Blob>();
+		if (blob != null) { return blob; }
+		// Ah. Then it's totes another Debri!
+		Debri debri = go.GetComponent<Debri>();
+		if (debri == null) { Debug.LogError ("Whoa! A Debri was hit by a thing that isn't a Blob NOR a Debri: " + go.name); return null; }
+		return debri.myBlob;
+	}
 	private void OnCollisionEnter2D (Collision2D col) {
-		// Debri hit me?
-		if (col.gameObject.layer == LayerMask.NameToLayer(LayerNames.Blob)) {
-			Blob blob = col.gameObject.GetComponent<Blob>();
-			if (blob == null) { Debug.LogError ("Whoa! GO on Blob layer collided with Debri, but it doesn't have a Blob script!"); }
+		GameObject go = col.gameObject;
+		// Did I hit a Debris or a Blob?
+		if (go.layer == LayerMask.NameToLayer(LayerNames.Blob)) {
+			Blob blob = GetBlobFromGO (go);
+			if (blob == null) { return; } // Oops!
 			if (type == Types.Good) {
-				StickToBlob (blob);
+				StickToBlob (blob, col);
 			}
 			// Bad??
 			else {
@@ -56,38 +65,42 @@ public class Debri : MonoBehaviour {
 			}
 		}
 
-		if (col.gameObject.layer == LayerMask.NameToLayer(LayerNames.Paddle)) {
-
-			HitPaddle();
+		if (go.layer == LayerMask.NameToLayer(LayerNames.Paddle)) {
+			OnHitPaddle ();
 		}
 	}
-	private void StickToBlob (Blob blob = null) {
+	private void StickToBlob (Blob _blob, Collision2D col) {
+		myBlob = _blob;
+		myBlob.OnDebriAdded (this);
+
+		// Update my physical properties!
 		this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Blob);
-		rigidbody.bodyType = RigidbodyType2D.Kinematic;
-		rigidbody.velocity = Vector2.zero;
-		rigidbody.angularVelocity = 0;
-		//this.transform.SetParent (blob.tf_MyDebris);
+//		rigidbody.bodyType = RigidbodyType2D.Kinematic;
+//		rigidbody.velocity = Vector2.zero;
+//		rigidbody.angularVelocity = 0;
+		this.transform.SetParent (myBlob.tf_MyDebris);
+		SpringJoint2D springJoint = gameObject.AddComponent<SpringJoint2D>();
+		springJoint.autoConfigureDistance = false;
+		springJoint.distance = Vector2.Distance(this.gameObject.transform.localPosition, col.gameObject.transform.localPosition) * 1f;
+		springJoint.connectedBody = col.rigidbody;
 
 		// TEMP!
 		this.GetComponent<SpriteRenderer>().color = Color.green;
-		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_CORE_HIT, 0.6f);
 	}
 	private void DamageBlob (Blob blob) {
-		// TODO: This
+		blob.GetHitByDebri (this);
 	}
 
-	private void HitPaddle(){
-		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_PADDLE_HIT);
-		Destroy(gameObject);
-		/*this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Blob);
-		rigidbody.bodyType = RigidbodyType2D.Kinematic;
-		rigidbody.velocity = rigidbody.velocity * -1 * 10f;
-		rigidbody.angularVelocity = 0;
-		*/
+	private void OnHitPaddle () {
+		// Am I on the Blob?? Then do nothin'!
+		if (myBlob != null) { return; }
+		// If I'm bad, then blow me right up!
+		if (type == Types.Bad) {
+			// TODO: Particle fx.
+			Destroy (gameObject);
+		}
 
-		/*Vector2 knockbackVelocity = 
-		new Vector2((transform.position.x - player.transform.position.x) * forceMultiplier, (transform.position.y - player.transform.position.y) * forceMultiplier);
-		rigidbody.GetComponent<Rigidbody2D>().velocity = -knockbackVelocity;*/
+		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_PADDLE_HIT);
 	}
 
 }

@@ -60,6 +60,12 @@ public class DebrisController : MonoBehaviour {
 		if (timeUntilSpawnDebri <= 0) {
 			SpawnDebri ();
 		}
+		// QQQ TESTING
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			for (int i=0; i<50; i++) {
+				SpawnDebri ();
+			}
+		}
 	}
 
 

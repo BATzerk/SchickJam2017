@@ -8,14 +8,17 @@ public class Paddle : MonoBehaviour {
 	// Components
 	[SerializeField] private BoxCollider2D bodyCollider; // TODO: Andrew. Make these curved. ( ( ( ( ( ( ( ( ( like that, not like |, like ) not |. <3
 	[SerializeField] private SpriteRenderer bodySprite;
+	// References
+	[SerializeField] private PaddleController paddleController;
 	// Properties
-	private float distFromCenter;
 	private float loc; // from 0 to 1.
 	private float locVel;
 	private float angleStart,angleEnd; // we lerp between these two with loc.
 	private int index; // 0 or 1. Determines which joystick axis affects me.
 	private int inputDir; // -1 or 1, depending on my index.
 
+	// Getters
+	private float distFromCenter { get { return paddleController.PaddleDistance; } }
 
 
 	// ----------------------------------------------------------------
@@ -37,7 +40,6 @@ public class Paddle : MonoBehaviour {
 
 		// Set my properties, kween!
 		SetSize (new Vector2(0.2f, 1.4f));
-		distFromCenter = 2; // TODO: Increase this as our blob size increases.
 	}
 
 
