@@ -20,6 +20,11 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private TextMesh textScore;
 	[SerializeField] private TextMesh textHighScore;
 
+	// Getters
+	public bool IsGameOver { get { return gameState==GameState.GAMEOVER; } }
+
+
+
 
 	// ----------------------------------------------------------------
 	//  Start / Destroy
