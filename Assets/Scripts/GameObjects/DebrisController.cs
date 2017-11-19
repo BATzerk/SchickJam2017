@@ -50,9 +50,9 @@ public class DebrisController : MonoBehaviour {
 			timeUntilSpawnGood = 0.2f;
 		}
 		else {
-			float badSpawnRateLoc = Mathf.InverseLerp (0, 14, numBadSpawned);
-			float randMin = Mathf.Lerp (0.7f, 0.2f, badSpawnRateLoc);
-			float randMax = Mathf.Lerp (1.8f, 0.9f, badSpawnRateLoc);
+			float badSpawnRateLoc = Mathf.InverseLerp (0, 100, numBadSpawned);
+			float randMin = Mathf.Lerp (0.7f, 0.5f, badSpawnRateLoc);
+			float randMax = Mathf.Lerp (1.8f, 1.5f, badSpawnRateLoc);
 			timeUntilSpawnBad = Random.Range (randMin, randMax);
 			numBadSpawned ++;
 		}

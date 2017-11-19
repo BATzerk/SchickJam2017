@@ -65,7 +65,7 @@ public class Blob : MonoBehaviour {
 	}
 
 	private void UpdateMyDebriColor () {
-		float hue = (((NumDebri+50)%160f)/160f);
+		float hue = (((NumDebri+50)%200f)/200f);
 		Color color = new HSBColor(hue, 1, 1).ToColor();
 		for (int i=myDebri.Count-1; i>=0; --i) {
 			myDebri[i].SetBodyColor (color);
