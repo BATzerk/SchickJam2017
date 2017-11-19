@@ -117,6 +117,8 @@ public class GameController : MonoBehaviour {
 
 	private void UpdateScoreView(){
 
+		if(gameState == GameState.GAMEOVER){ return;};
+
 		score = blob.numOfDebrisCollected;
 
 		if(score >= highscore){
