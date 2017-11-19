@@ -16,7 +16,7 @@ public class DestructiveBurst : MonoBehaviour {
 		circleCollider.radius = radius;
 		GameUtils.SizeSprite (bodySprite, radius*2,radius*2);
 
-		alpha = 0.6f;
+		alpha = 0.5f;
 		ApplyAlpha ();
 	}
 
@@ -25,7 +25,7 @@ public class DestructiveBurst : MonoBehaviour {
 	}
 
 	private void FixedUpdate () {
-		alpha -= 0.03f;
+		alpha -= 0.001f;
 		ApplyAlpha ();
 		if (alpha <= 0) {
 			Destroy (this.gameObject);

@@ -79,8 +79,8 @@ public class GameController : MonoBehaviour {
 		DestroyAnyDriftingDebri ();
 
 		canRestartGame = false;
-		Invoke("ShowTitle", 1);
-		Invoke("AllowGameRestart", 2);
+		Invoke("ShowTitle", 1.5f);
+		Invoke("AllowGameRestart", 3);
 		// TODO: Delay then restart
 		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.3f);
 		AudioController.getSingleton ().PlaySFX(SoundClipId.SFX_GAME_OVER);
