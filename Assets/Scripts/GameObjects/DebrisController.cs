@@ -7,6 +7,7 @@ public class DebrisController : MonoBehaviour {
 //	private float spawnInterval = 0.2f; // in SECONDS.
 	private float timeUntilSpawnGood;
 	private float timeUntilSpawnBad;
+	private int numBadSpawned;
 	// References
 	[SerializeField] private Blob blob;
 	[SerializeField] private GameController gameController;
@@ -24,6 +25,7 @@ public class DebrisController : MonoBehaviour {
 		// Reset values.
 		timeUntilSpawnBad = 2f;
 		timeUntilSpawnGood = 0f;
+		numBadSpawned = 0;
 	}
 
 
@@ -43,12 +45,16 @@ public class DebrisController : MonoBehaviour {
 
 		newObj.Initialize (tf_debris, pos, vel, type);
 
-		// Reset values
+		// Update values
 		if (type==Debri.Types.Good) {
 			timeUntilSpawnGood = 0.2f;
 		}
 		else {
-			timeUntilSpawnBad = Random.Range (0.5f, 2f);
+			float badSpawnRateLoc = Mathf.InverseLerp (0, 14, numBadSpawned);
+			float randMin = Mathf.Lerp (0.7f, 0.2f, badSpawnRateLoc);
+			float randMax = Mathf.Lerp (1.8f, 0.9f, badSpawnRateLoc);
+			timeUntilSpawnBad = Random.Range (randMin, randMax);
+			numBadSpawned ++;
 		}
 	}
 

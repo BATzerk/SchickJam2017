@@ -99,6 +99,8 @@ public class Debri : MonoBehaviour {
 		return debri.myBlob;
 	}
 	private void OnCollisionEnter2D (Collision2D col) {
+		if (currentState == States.OnBlob) { return; } // Do nothin' if we're already on the blob.
+
 		GameObject go = col.gameObject;
 		// Did I hit a Debris or a Blob?
 		if (go.layer == LayerMask.NameToLayer(LayerNames.Blob)) {
