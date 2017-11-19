@@ -147,7 +147,7 @@ public class Debri : MonoBehaviour {
 			bodySprite.sprite = spt;
 		}
 
-		AudioController.getSingleton().PlaySFXRandomFromArray(new string[]{ "Audio/sfx/Positive_07"}, 0.6f);
+		AudioController.getSingleton().PlaySFXRandomFromArray(new string[]{ "Audio/sfx/Positive_07"}, 0.3f);
 
 		//"Audio/sfx/Positive_02", "Audio/sfx/Positive_03", "Audio/sfx/Positive_04", "Audio/sfx/Positive_05",
 	}

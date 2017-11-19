@@ -64,6 +64,7 @@ public class GameController : MonoBehaviour {
 		debrisController.Reset ();
 		paddleController.Reset ();
 		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.8f);
+		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.SFX_GAME_START, 1.0f);
 	}
 
 
@@ -153,6 +154,8 @@ public class GameController : MonoBehaviour {
 			highscore = score;
 			textHighScore.color = new Color(255/255f, 200/255f, 60/255f);
 			textScore.color = new Color(255/255f, 200/255f, 60/255f);
+
+			AudioController.getSingleton().PlaySFX(SoundClipId.SFX_HIGHSCORE, 1.0f);
 		}else{
 			// not a new highscore
 			textHighScore.color = Color.black;
