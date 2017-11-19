@@ -17,10 +17,12 @@ public class GameController : MonoBehaviour {
 	private bool canRestartGame;
 	static float score;
 	float highscore = 0;
+	[SerializeField] private GameObject prefabGO_badBurst;
 	[SerializeField] private GameObject viewTitle;
 	[SerializeField] private GameObject viewControls;
 	[SerializeField] private Text textScore;
 	[SerializeField] private Text textHighScore;
+	[SerializeField] private Transform tf_particleBursts;
 
 	// Getters
 	public int GuiltyPlayer;
@@ -39,6 +41,13 @@ public class GameController : MonoBehaviour {
 
 		StartNewGame ();
 		GameOver ();
+
+		// Add event listeners!
+		GameManagers.Instance.EventManager.AddParticleBurstEvent += AddParticleBurst;
+	}
+	private void OnDestroy () {
+		// Remove event listeners!
+		GameManagers.Instance.EventManager.AddParticleBurstEvent -= AddParticleBurst;
 	}
 
 
@@ -63,6 +72,7 @@ public class GameController : MonoBehaviour {
 		blob.Reset ();
 		debrisController.Reset ();
 		paddleController.Reset ();
+		GameUtils.DestroyAllChildren (tf_particleBursts);
 		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.8f);
 		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_GAME_START, 1.0f);
 	}
@@ -181,6 +191,17 @@ public class GameController : MonoBehaviour {
 	{
 		Paddle.OnPlayerInput -= PlayerInput;
 	}
+
+
+
+
+	private void AddParticleBurst (Vector2 pos) {
+		GameObject go_particleBurst = Instantiate(prefabGO_badBurst);
+		go_particleBurst.transform.SetParent (tf_particleBursts);
+		go_particleBurst.transform.localPosition = pos;
+		go_particleBurst.transform.localScale = Vector3.one;
+	}
+
 }
 
 

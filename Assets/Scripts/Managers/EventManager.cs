@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public class EventManager {
 	// Actions and Event Variables
-	public delegate void NoParamAction ();
+	public delegate void Vector2Action (Vector2 pos);
 
-	public event NoParamAction SomethingEvent;
+	public event Vector2Action AddParticleBurstEvent;
 
 	// Events
-	public void OnSomething () { if (SomethingEvent!=null) { SomethingEvent (); } }
+	public void AddParticleBurst (Vector2 pos) { if (AddParticleBurstEvent!=null) { AddParticleBurstEvent (pos); } }
 
 
 

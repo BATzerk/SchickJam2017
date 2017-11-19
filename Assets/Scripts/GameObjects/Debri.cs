@@ -160,8 +160,9 @@ public class Debri : MonoBehaviour {
 		if (myBlob != null) { return; }
 		// If I'm bad, then blow me right up!
 //		if (type == Types.Bad) {
-			// TODO: Particle fx.
-			Destroy (gameObject);
+		// Add particle burst!
+		GameManagers.Instance.EventManager.AddParticleBurst (this.transform.localPosition);
+		Destroy (gameObject);
 //		}
 
 		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_PADDLE_HIT, 0.4f);
