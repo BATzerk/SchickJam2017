@@ -37,16 +37,17 @@ public class Debri : MonoBehaviour {
 		if(type == Types.Bad){
 			//this.GetComponent<SpriteRenderer>().color = Color.red;
 			 imgs = new string[] {"Shapes/bad1"};
+			gameObject.transform.localScale = (gameObject.transform.localScale * 1.2f);
 		}else{
 			// pick random good sprit
-			imgs = new string[] {"Shapes/good1", "Shapes/good2", "Shapes/good3", "Shapes/good4", "Shapes/good5"};
+			imgs = new string[] {"Shapes/good1"};//b, "Shapes/good2", "Shapes/good3", "Shapes/good4", "Shapes/good5"};
+			gameObject.transform.localScale = (gameObject.transform.localScale * 0.5f) + this.transform.localScale * Random.Range(0,2f);
 
 		}
 		index = Random.Range(0, imgs.Length);
 		spt = Resources.Load <Sprite> (imgs[index]);
 		this.GetComponent<SpriteRenderer>().sprite = spt;
 
-		gameObject.transform.localScale = this.transform.localScale * Random.Range(0,3f);
 		//Vector3.one * 0.5f  * t
 	}
 
@@ -107,7 +108,11 @@ public class Debri : MonoBehaviour {
 		springJoint.connectedBody = col.rigidbody;
 
 		// TEMP!
-		this.GetComponent<SpriteRenderer>().color = Color.green;
+	//	this.GetComponent<SpriteRenderer>().color = Color.green;
+
+		Sprite spt = Resources.Load <Sprite> ("Shapes/good2");
+		this.GetComponent<SpriteRenderer>().sprite = spt;
+
 		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_CORE_HIT, 0.1f);
 	}
 	private void DamageBlob (Blob blob) {

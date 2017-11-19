@@ -95,7 +95,7 @@ public class AudioController : MonoBehaviour
 		clips.Add (SoundClipId.ERROR, "Audio/sfx/Paddle Hits a Good Object");
 		clips.Add (SoundClipId.SFX_PADDLE_HIT, "Audio/sfx/Paddle_Hit-Bad-01a");
 		clips.Add (SoundClipId.SFX_CORE_HIT, "Audio/sfx/Good_Particle_Get-01");
-		clips.Add (SoundClipId.SFX_GAME_OVER, "Audio/sfx/GameOver");
+		clips.Add (SoundClipId.SFX_GAME_OVER, "Audio/sfx/Paddle_Hit-Bad-02");
 		clips.Add (SoundClipId.SFX_GAME_START, "Audio/sfx/GameStart");
 
 
@@ -291,6 +291,7 @@ public class AudioController : MonoBehaviour
 
 		//}
 
+		bgmVol = volume;
 		bgm.clip = ac; // define the clip
 		bgm.loop = loop;
 		bgm.time = startTime;

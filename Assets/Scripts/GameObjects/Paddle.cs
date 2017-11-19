@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class Paddle : MonoBehaviour {
 	// Constants
-	private const float INPUT_FORCE = 0.01f; // Higher is faster.
+	private const float INPUT_FORCE = 0.008f; // Higher is faster.
 	// Components
 	[SerializeField] private BoxCollider2D handCollider; // TODO: Andrew. Make these curved. ( ( ( ( ( ( ( ( ( like that, not like |, like ) not |. <3
 	[SerializeField] private SpriteRenderer handSprite;
@@ -93,7 +93,7 @@ public class Paddle : MonoBehaviour {
 //			locVel *= 0.92f;
 //		}
 //		else {
-			locVel *= 0.7f;
+			locVel *= 0.8f;
 //		}
 		// Great! Position/rotate me!
 		float angle = Mathf.Lerp(angleStart, angleEnd, loc);

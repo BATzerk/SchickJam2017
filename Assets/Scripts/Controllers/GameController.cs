@@ -4,42 +4,36 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-	public enum GameState { GAMEOVER, PLAYING }
+	public enum GameState { GAMEOVER, PLAYING, TRANSITION }
 	static public GameState gameState = GameState.GAMEOVER;
-
 	// References
 	[SerializeField] private Blob blob;
 	[SerializeField] private DebrisController debrisController;
 	[SerializeField] private GameCameraController cameraController;
 	[SerializeField] private PaddleController paddleController;
+	[SerializeField] private WinnerLoserUI winnerLoserUI;
 	private EventManager eventManager;
-
+	// Properties
 	static float score;
 	float highscore = 0;
-
 	[SerializeField] private GameObject viewTitle;
 	[SerializeField] private Text textScore;
 	[SerializeField] private Text textHighScore;
 
 	// Getters
+	public int GuiltyPlayer;
 	public bool IsGameOver { get { return gameState==GameState.GAMEOVER; } }
-
-
 
 
 	// ----------------------------------------------------------------
 	//  Start / Destroy
 	// ----------------------------------------------------------------
 	private void Start () {
-
-
 		// Set application values
 		Application.targetFrameRate = GameProperties.TARGET_FRAME_RATE;
 
 		// Reset things!
 		eventManager = GameManagers.Instance.EventManager;
-
-
 
 		StartNewGame ();
 		GameOver();
@@ -57,6 +51,11 @@ public class GameController : MonoBehaviour {
 		Time.timeScale = Time.timeScale==0 ? 1 : 0;
 	}
 	private void StartNewGame () {
+		// Reset values.
+		GuiltyPlayer = -1; // no one is guilty!!!!
+
+		// Reset peeps.
+		winnerLoserUI.Reset ();
 		cameraController.Reset ();
 		blob.Reset ();
 		debrisController.Reset ();
@@ -72,10 +71,15 @@ public class GameController : MonoBehaviour {
 	 * Highscore??
 	 */
 	public void GameOver(){
-		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_2, 0.8f);
-		gameState = GameState.GAMEOVER;
+		gameState = GameState.TRANSITION;
 		viewTitle.SetActive( true);
-		// Delay then restart
+		winnerLoserUI.OnGameOver (GuiltyPlayer);
+
+		Invoke("DelayRestartComplete",2);
+		// TODO: Delay then restart
+		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_2, 0.2f);
+		AudioController.getSingleton ().PlaySFX(SoundClipId.SFX_GAME_OVER);
+
 	}
 
 
@@ -98,18 +102,21 @@ public class GameController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Return)) {
 			ReloadScene ();
 		}
-//		// Action Button
-//		else if (InputController.IsButtonDown_Action) {
-//			OnButtonDown_Action ();
-//		}
+		//		// Action Button
+		//		else if (InputController.IsButtonDown_Action) {
+		//			OnButtonDown_Action ();
+		//		}
 		// P = Toggle pause
 		else if (Input.GetKeyDown (KeyCode.Escape)) {
 			TogglePause ();
 		}
 	}
 
-	private void PlayerInput(){
+	private void DelayRestartComplete(){
+		gameState = GameState.GAMEOVER;
+	}
 
+	private void PlayerInput(){
 		if(gameState == GameState.GAMEOVER){
 			StartNewGame();
 
@@ -120,7 +127,7 @@ public class GameController : MonoBehaviour {
 
 	private void UpdateScoreView(){
 
-		if(gameState == GameState.GAMEOVER){ return;};
+		if(gameState != GameState.PLAYING){ return;};
 
 		score = blob.numOfDebrisCollected;
 
@@ -133,7 +140,7 @@ public class GameController : MonoBehaviour {
 			textHighScore.color = Color.white;
 			textScore.color = Color.white;
 		}
-			
+
 		textScore.text = score.ToString("N0");
 		textHighScore.text = highscore.ToString("N0");
 	}
