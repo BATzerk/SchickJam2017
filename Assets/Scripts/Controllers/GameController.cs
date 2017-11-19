@@ -75,7 +75,6 @@ public class GameController : MonoBehaviour {
 	 */
 	public void GameOver () {
 		gameState = GameState.GAMEOVER;
-		viewControls.SetActive( true);
 		winnerLoserUI.OnGameOver (GuiltyPlayer);
 		DestroyAnyDriftingDebri ();
 
@@ -88,6 +87,7 @@ public class GameController : MonoBehaviour {
 	}
 	private void ShowTitle () {
 		viewTitle.SetActive (true);
+		viewControls.SetActive(true);
 	}
 
 	private void DestroyAnyDriftingDebri () {
