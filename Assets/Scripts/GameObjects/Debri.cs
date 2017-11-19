@@ -7,6 +7,7 @@ public class Debri : MonoBehaviour {
 	public enum Types { Good, Bad }
 	public enum States { Drifting, OnBlob }
 	// Components
+	[SerializeField] private SpriteRenderer auraSprite;
 	[SerializeField] private SpriteRenderer bodySprite;
 	[SerializeField] private Rigidbody2D rigidbody;
 	// Properties
@@ -43,11 +44,13 @@ public class Debri : MonoBehaviour {
 			 imgs = new string[] {"Shapes/bad1"};
 			gameObject.transform.localScale = (gameObject.transform.localScale * 1.2f);
 			this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Debri_Bad);
+			auraSprite.enabled = true;
 		}else{
 			// pick random good sprit
 			imgs = new string[] {"Shapes/good1"};//b, "Shapes/good2", "Shapes/good3", "Shapes/good4", "Shapes/good5"};
 			gameObject.transform.localScale = (gameObject.transform.localScale * 0.5f) + this.transform.localScale * Random.Range(0,2f);
 			this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Debri_Good);
+			auraSprite.enabled = false;
 		}
 		index = Random.Range(0, imgs.Length);
 		spt = Resources.Load <Sprite> (imgs[index]);
@@ -55,6 +58,11 @@ public class Debri : MonoBehaviour {
 
 		//Vector3.one * 0.5f  * t
 	}
+
+	public void SetBodyColor (Color _color) {
+		bodySprite.color = _color;
+	}
+
 
 	// ----------------------------------------------------------------
 	//  Update
@@ -73,7 +81,7 @@ public class Debri : MonoBehaviour {
 		}
 	}
 	private void UpdateAndApplyAlpha () {
-		float alpha = Mathf.Sin (Time.time*10f)*0.5f + 1f;
+		float alpha = Mathf.Sin (Time.time*20f)*0.5f + 0.7f;
 		GameUtils.SetSpriteAlpha (bodySprite, alpha);
 	}
 

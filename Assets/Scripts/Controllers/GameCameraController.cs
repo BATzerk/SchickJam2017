@@ -52,12 +52,12 @@ public class GameCameraController : MonoBehaviour {
 		zoomScale += (zoomScale_target-zoomScale) / easing_zoom;
 	}
 	private void ApplyZoom () {
-		camera.orthographicSize = 5*zoomScale;
+		camera.orthographicSize = 4 + 5*zoomScale;
 	}
 
 
 	public void UpdateZoomScaleTarget (float blobRadius) {
-		zoomScale_target = Mathf.Max (1, blobRadius*0.4f); // TODO balance this right
+		zoomScale_target = Mathf.Max (1, blobRadius*0.3f); // TODO balance this right
 	}
 
 }
