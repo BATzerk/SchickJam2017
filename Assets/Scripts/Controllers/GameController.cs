@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour {
 	static float score;
 	float highscore = 0;
 	[SerializeField] private GameObject viewTitle;
+	[SerializeField] private GameObject viewControls;
 	[SerializeField] private Text textScore;
 	[SerializeField] private Text textHighScore;
 
@@ -75,13 +76,14 @@ public class GameController : MonoBehaviour {
 	public void GameOver () {
 		gameState = GameState.GAMEOVER;
 		viewTitle.SetActive( true);
+		viewControls.SetActive( true);
 		winnerLoserUI.OnGameOver (GuiltyPlayer);
 		DestroyAnyDriftingDebri ();
 
 		canRestartGame = false;
 		Invoke("AllowGameRestart", 2);
 		// TODO: Delay then restart
-		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.2f);
+		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.3f);
 		AudioController.getSingleton ().PlaySFX(SoundClipId.SFX_GAME_OVER);
 	}
 
@@ -134,6 +136,7 @@ public class GameController : MonoBehaviour {
 			StartNewGame ();
 
 			viewTitle.SetActive (false);
+			viewControls.SetActive( false);
 			gameState = GameState.PLAYING;
 		}
 	}
