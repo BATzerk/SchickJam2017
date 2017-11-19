@@ -98,7 +98,7 @@ public class AudioController : MonoBehaviour
 		clips.Add (SoundClipId.SFX_CORE_HIT, "Audio/sfx/Good_Particle_Get-01");
 		clips.Add (SoundClipId.SFX_GAME_OVER, "Audio/sfx/Paddle Hits a Bad Object");
 		clips.Add (SoundClipId.SFX_GAME_START, "Audio/sfx/GameStart");
-		clips.Add ( SoundClipId.SFX_HIGHSCORE, "Audio/sfx/Timer Countdown" );
+		clips.Add ( SoundClipId.SFX_HIGHSCORE, "Audio/sfx/Positive_03" );
 
 
 
