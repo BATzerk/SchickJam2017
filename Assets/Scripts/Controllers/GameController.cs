@@ -42,6 +42,7 @@ public class GameController : MonoBehaviour {
 
 
 		StartNewGame ();
+		GameOver();
 	}
 
 

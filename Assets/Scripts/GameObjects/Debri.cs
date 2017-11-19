@@ -20,7 +20,8 @@ public class Debri : MonoBehaviour {
 	public void Initialize (Transform _parentTransform, Vector2 _pos, Vector2 _vel, Types _type) {
 		this.transform.SetParent (_parentTransform);
 		this.transform.localScale = Vector3.one;
-		this.transform.localEulerAngles = Vector3.zero;
+		this.transform.localEulerAngles = Vector3.zero + new Vector3(0,0,Random.Range(0,360));
+	
 		this.name = "Debri_" + _type;
 
 		// TODO: Set sprite! And collider!
@@ -29,9 +30,24 @@ public class Debri : MonoBehaviour {
 		this.transform.localPosition = _pos;
 		rigidbody.velocity = _vel;
 
+		Sprite spt;
+		string[]imgs;
+		int index;
+
 		if(type == Types.Bad){
-			this.GetComponent<SpriteRenderer>().color = Color.red;
+			//this.GetComponent<SpriteRenderer>().color = Color.red;
+			 imgs = new string[] {"Shapes/bad1"};
+		}else{
+			// pick random good sprit
+			imgs = new string[] {"Shapes/good1", "Shapes/good2", "Shapes/good3", "Shapes/good4", "Shapes/good5"};
+
 		}
+		index = Random.Range(0, imgs.Length);
+		spt = Resources.Load <Sprite> (imgs[index]);
+		this.GetComponent<SpriteRenderer>().sprite = spt;
+
+		gameObject.transform.localScale = this.transform.localScale * Random.Range(0,3f);
+		//Vector3.one * 0.5f  * t
 	}
 
 	// ----------------------------------------------------------------
@@ -92,7 +108,7 @@ public class Debri : MonoBehaviour {
 
 		// TEMP!
 		this.GetComponent<SpriteRenderer>().color = Color.green;
-		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_CORE_HIT, 0.6f);
+		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_CORE_HIT, 0.1f);
 	}
 	private void DamageBlob (Blob blob) {
 		blob.GetHitByDebri (this);
@@ -107,7 +123,7 @@ public class Debri : MonoBehaviour {
 			Destroy (gameObject);
 //		}
 
-		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_PADDLE_HIT);
+		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_PADDLE_HIT, 0.4f);
 	}
 
 	public void BlowUp () {
