@@ -75,16 +75,19 @@ public class GameController : MonoBehaviour {
 	 */
 	public void GameOver () {
 		gameState = GameState.GAMEOVER;
-		viewTitle.SetActive( true);
 		viewControls.SetActive( true);
 		winnerLoserUI.OnGameOver (GuiltyPlayer);
 		DestroyAnyDriftingDebri ();
 
 		canRestartGame = false;
+		Invoke("ShowTitle", 1);
 		Invoke("AllowGameRestart", 2);
 		// TODO: Delay then restart
 		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.3f);
 		AudioController.getSingleton ().PlaySFX(SoundClipId.SFX_GAME_OVER);
+	}
+	private void ShowTitle () {
+		viewTitle.SetActive (true);
 	}
 
 	private void DestroyAnyDriftingDebri () {
@@ -104,9 +107,9 @@ public class GameController : MonoBehaviour {
 	private void Update () {
 		RegisterButtonInput ();
 
-		if(blob.life <= 0){
+		if (blob.life <= 0){
 			// GameOver!
-			if(gameState == GameState.PLAYING){
+			if (gameState == GameState.PLAYING) {
 				GameOver();
 			}
 		}
@@ -144,7 +147,7 @@ public class GameController : MonoBehaviour {
 	private void UpdateScoreView(){
 		if(gameState != GameState.PLAYING){ return;};
 
-		score = blob.numOfDebrisCollected;
+		score = blob.NumDebri;
 
 		if(score >= highscore) {
 			highscore = score;

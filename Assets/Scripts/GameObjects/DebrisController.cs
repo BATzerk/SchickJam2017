@@ -22,7 +22,7 @@ public class DebrisController : MonoBehaviour {
 		GameUtils.DestroyAllChildren (tf_debris);
 
 		// Reset values.
-		timeUntilSpawnBad = 3f;
+		timeUntilSpawnBad = 2f;
 		timeUntilSpawnGood = 0f;
 	}
 
