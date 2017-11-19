@@ -98,7 +98,7 @@ public class Paddle : MonoBehaviour {
 		// Great! Position/rotate me!
 		float angle = Mathf.Lerp(angleStart, angleEnd, loc);
 //		Vector2 handPos = new Vector3 (Mathf.Cos(angle)*distFromCenter, Mathf.Sin(angle)*distFromCenter);
-		Vector2 armSize = new Vector2(distFromCenter, 0.1f);
+		Vector2 armSize = new Vector2(distFromCenter, 0.2f);
 
 		handSprite.transform.localPosition = new Vector3(distFromCenter, 0, 0);
 		handCollider.transform.localPosition = new Vector3(distFromCenter, 0, 0);

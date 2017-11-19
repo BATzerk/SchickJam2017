@@ -86,13 +86,19 @@ public class Blob : MonoBehaviour {
 	public void GetHitByDebri (Debri _debri) {
 		// Who the fuck's fault is this. ...Jesus, Deb. This is why we can't have nice things.
 		gameController.GuiltyPlayer = _debri.transform.localPosition.x<0 ? 0 : 1;
-		AddDestructiveBurst (_debri.transform.localPosition);
+
+		Transform previousTransform = _debri.transform;
+		_debri.transform.SetParent(this.transform.parent); // Pop it onto the parent reeeeal quick! So we can accurately get its position.
+		Vector2 pos = _debri.transform.localPosition;
+		_debri.transform.SetParent(previousTransform); // Pull it off the layer now!
+
+		AddDestructiveBurst (pos);
 //		Destroy (_debri.gameObject);
 		life -= 100;
 	}
 	private void AddDestructiveBurst (Vector2 pos) {
 		DestructiveBurst burst = Instantiate(prefabGO_destructiveBurst).GetComponent<DestructiveBurst>();
-		float burstRadius = 0.5f;//cachedRadius * 0.6f; // the bigger I am, the bigger the blast radius is!
+		float burstRadius = 2f;//cachedRadius * 0.6f; // the bigger I am, the bigger the blast radius is!
 		burst.Initialize (tf_destructiveBursts, pos, burstRadius);
 //		BlowUpDebriInArea (pos, burstRadius);
 	}
