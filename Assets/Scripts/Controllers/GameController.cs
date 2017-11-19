@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -17,8 +18,8 @@ public class GameController : MonoBehaviour {
 	float highscore = 0;
 
 	[SerializeField] private GameObject viewTitle;
-	[SerializeField] private TextMesh textScore;
-	[SerializeField] private TextMesh textHighScore;
+	[SerializeField] private Text textScore;
+	[SerializeField] private Text textHighScore;
 
 	// Getters
 	public bool IsGameOver { get { return gameState==GameState.GAMEOVER; } }
@@ -59,7 +60,7 @@ public class GameController : MonoBehaviour {
 		blob.Reset ();
 		debrisController.Reset ();
 		paddleController.Reset ();
-		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1);
+		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.8f);
 	}
 
 
@@ -70,7 +71,7 @@ public class GameController : MonoBehaviour {
 	 * Highscore??
 	 */
 	public void GameOver(){
-
+		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_2, 0.8f);
 		gameState = GameState.GAMEOVER;
 		viewTitle.SetActive( true);
 		// Delay then restart
@@ -110,6 +111,7 @@ public class GameController : MonoBehaviour {
 
 		if(gameState == GameState.GAMEOVER){
 			StartNewGame();
+
 			viewTitle.SetActive(false);
 			gameState =  GameState.PLAYING;
 		}

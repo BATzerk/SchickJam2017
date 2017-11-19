@@ -101,8 +101,8 @@ public class AudioController : MonoBehaviour
 
 
 
-		clips.Add( SoundClipId.MUS_BACKGROUND_1, "Audio/music/SchickLMMS");
-		clips.Add( SoundClipId.MUS_BACKGROUND_2, "Audio/music/SchickLMMS");
+		clips.Add( SoundClipId.MUS_BACKGROUND_1, "Audio/music/SessionLoop");
+		clips.Add( SoundClipId.MUS_BACKGROUND_2, "Audio/music/TitleScreenLoop");
 	
 
 	}
