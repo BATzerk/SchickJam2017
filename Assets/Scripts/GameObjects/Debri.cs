@@ -145,7 +145,9 @@ public class Debri : MonoBehaviour {
 			bodySprite.sprite = spt;
 		}
 
-		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_CORE_HIT, 0.1f);
+		AudioController.getSingleton().PlaySFXRandomFromArray(new string[]{ "Audio/sfx/Positive_07"}, 0.6f);
+
+		//"Audio/sfx/Positive_02", "Audio/sfx/Positive_03", "Audio/sfx/Positive_04", "Audio/sfx/Positive_05",
 	}
 	private void DamageBlob (Blob blob) {
 		blob.GetHitByDebri (this);

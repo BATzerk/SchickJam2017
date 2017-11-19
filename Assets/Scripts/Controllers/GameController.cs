@@ -151,8 +151,8 @@ public class GameController : MonoBehaviour {
 
 		if(score >= highscore) {
 			highscore = score;
-			textHighScore.color = new Color(255/255f, 180/255f, 0/255f);
-			textScore.color = new Color(255/255f, 180/255f, 0/255f);
+			textHighScore.color = new Color(255/255f, 200/255f, 60/255f);
+			textScore.color = new Color(255/255f, 200/255f, 60/255f);
 		}else{
 			// not a new highscore
 			textHighScore.color = Color.black;
