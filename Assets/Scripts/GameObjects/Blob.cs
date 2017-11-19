@@ -10,6 +10,7 @@ public class Blob : MonoBehaviour {
 	// References
 	[SerializeField] private GameObject prefabGO_destructiveBurst;
 	[SerializeField] private GameCameraController cameraController;
+	[SerializeField] private GameController gameController;
 	[SerializeField] private PaddleController paddleController;
 	private List<Debri> myDebri; // all the Schick that's stuck to me! Schickhead!
 
@@ -69,6 +70,8 @@ public class Blob : MonoBehaviour {
 		numOfDebrisCollected++;
 	}
 	public void GetHitByDebri (Debri _debri) {
+		// Who the fuck's fault is this. ...Jesus, Deb. This is why we can't have nice things.
+		gameController.GuiltyPlayer = _debri.transform.localPosition.x<0 ? 0 : 1;
 		AddDestructiveBurst (_debri.transform.localPosition);
 		Destroy (_debri.gameObject);
 		life -= 100;

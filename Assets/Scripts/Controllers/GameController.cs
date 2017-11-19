@@ -6,40 +6,34 @@ public class GameController : MonoBehaviour {
 
 	public enum GameState { GAMEOVER, PLAYING }
 	static public GameState gameState = GameState.GAMEOVER;
-
 	// References
 	[SerializeField] private Blob blob;
 	[SerializeField] private DebrisController debrisController;
 	[SerializeField] private GameCameraController cameraController;
 	[SerializeField] private PaddleController paddleController;
+	[SerializeField] private WinnerLoserUI winnerLoserUI;
 	private EventManager eventManager;
-
+	// Properties
 	static float score;
 	float highscore = 0;
-
 	[SerializeField] private GameObject viewTitle;
 	[SerializeField] private Text textScore;
 	[SerializeField] private Text textHighScore;
 
 	// Getters
+	public int GuiltyPlayer;
 	public bool IsGameOver { get { return gameState==GameState.GAMEOVER; } }
-
-
 
 
 	// ----------------------------------------------------------------
 	//  Start / Destroy
 	// ----------------------------------------------------------------
 	private void Start () {
-
-
 		// Set application values
 		Application.targetFrameRate = GameProperties.TARGET_FRAME_RATE;
 
 		// Reset things!
 		eventManager = GameManagers.Instance.EventManager;
-
-
 
 		StartNewGame ();
 	}
@@ -56,6 +50,11 @@ public class GameController : MonoBehaviour {
 		Time.timeScale = Time.timeScale==0 ? 1 : 0;
 	}
 	private void StartNewGame () {
+		// Reset values.
+		GuiltyPlayer = -1; // no one is guilty!!!!
+
+		// Reset peeps.
+		winnerLoserUI.Reset ();
 		cameraController.Reset ();
 		blob.Reset ();
 		debrisController.Reset ();
@@ -71,10 +70,11 @@ public class GameController : MonoBehaviour {
 	 * Highscore??
 	 */
 	public void GameOver(){
-		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_2, 0.8f);
 		gameState = GameState.GAMEOVER;
 		viewTitle.SetActive( true);
-		// Delay then restart
+		winnerLoserUI.OnGameOver (GuiltyPlayer);
+		// TODO: Delay then restart
+		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_2, 0.8f);
 	}
 
 
@@ -97,10 +97,10 @@ public class GameController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Return)) {
 			ReloadScene ();
 		}
-//		// Action Button
-//		else if (InputController.IsButtonDown_Action) {
-//			OnButtonDown_Action ();
-//		}
+		//		// Action Button
+		//		else if (InputController.IsButtonDown_Action) {
+		//			OnButtonDown_Action ();
+		//		}
 		// P = Toggle pause
 		else if (Input.GetKeyDown (KeyCode.Escape)) {
 			TogglePause ();
@@ -132,7 +132,7 @@ public class GameController : MonoBehaviour {
 			textHighScore.color = Color.white;
 			textScore.color = Color.white;
 		}
-			
+
 		textScore.text = score.ToString("N0");
 		textHighScore.text = highscore.ToString("N0");
 	}
