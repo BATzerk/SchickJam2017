@@ -17,9 +17,9 @@ public class Blob : MonoBehaviour {
 
 	public float life;
 	const float maxLife = 100;
-	public int numOfDebrisCollected;
 
 	// Getters
+	public int NumDebri { get { return myDebri.Count; } }
 	public Transform tf_MyDebris { get { return tf_myDebris; } }
 	public float CachedRadius { get { return cachedRadius; } }
 	private float CalculateRadius () {
@@ -47,7 +47,6 @@ public class Blob : MonoBehaviour {
 		myDebri = new List<Debri>();
 		cachedRadius = 1f;
 		life = maxLife;
-		numOfDebrisCollected = 0;
 	}
 
 
@@ -70,9 +69,10 @@ public class Blob : MonoBehaviour {
 	//  Events
 	// ----------------------------------------------------------------
 	public void OnDebriAdded (Debri _debri) {
-		myDebri.Add (_debri);
-		UpdateRadius (false);
-		numOfDebrisCollected++;
+		if (!myDebri.Contains(_debri)) {
+			myDebri.Add (_debri);
+			UpdateRadius (false);
+		}
 	}
 	public void GetHitByDebri (Debri _debri) {
 		// Who the fuck's fault is this. ...Jesus, Deb. This is why we can't have nice things.
