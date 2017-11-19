@@ -42,10 +42,12 @@ public class Debri : MonoBehaviour {
 			//this.GetComponent<SpriteRenderer>().color = Color.red;
 			 imgs = new string[] {"Shapes/bad1"};
 			gameObject.transform.localScale = (gameObject.transform.localScale * 1.2f);
+			this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Debri_Bad);
 		}else{
 			// pick random good sprit
 			imgs = new string[] {"Shapes/good1"};//b, "Shapes/good2", "Shapes/good3", "Shapes/good4", "Shapes/good5"};
 			gameObject.transform.localScale = (gameObject.transform.localScale * 0.5f) + this.transform.localScale * Random.Range(0,2f);
+			this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Debri_Good);
 		}
 		index = Random.Range(0, imgs.Length);
 		spt = Resources.Load <Sprite> (imgs[index]);
@@ -94,8 +96,9 @@ public class Debri : MonoBehaviour {
 		if (go.layer == LayerMask.NameToLayer(LayerNames.Blob)) {
 			Blob blob = GetBlobFromGO (go);
 			if (blob == null) { return; } // Oops!
+			// Stick it!
+			StickToBlob (blob, col);
 			if (type == Types.Good) {
-				StickToBlob (blob, col);
 			}
 			// Bad??
 			else {
@@ -129,8 +132,10 @@ public class Debri : MonoBehaviour {
 		springJoint.distance = Vector2.Distance(this.gameObject.transform.localPosition, col.gameObject.transform.localPosition) * 1.2f;
 		springJoint.connectedBody = col.rigidbody;
 
-		Sprite spt = Resources.Load <Sprite> ("Shapes/good2");
-		this.GetComponent<SpriteRenderer>().sprite = spt;
+		if (type == Types.Good) {
+			Sprite spt = Resources.Load <Sprite> ("Shapes/good2");
+			bodySprite.sprite = spt;
+		}
 
 		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_CORE_HIT, 0.1f);
 	}

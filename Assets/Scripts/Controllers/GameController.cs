@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-	public enum GameState { GAMEOVER, PLAYING, TRANSITION }
+	public enum GameState { GAMEOVER, PLAYING }
 	static public GameState gameState = GameState.GAMEOVER;
 	// References
 	[SerializeField] private Blob blob;
@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private WinnerLoserUI winnerLoserUI;
 	private EventManager eventManager;
 	// Properties
+	private bool canRestartGame;
 	static float score;
 	float highscore = 0;
 	[SerializeField] private GameObject viewTitle;
@@ -36,7 +37,7 @@ public class GameController : MonoBehaviour {
 		eventManager = GameManagers.Instance.EventManager;
 
 		StartNewGame ();
-		GameOver();
+		GameOver ();
 	}
 
 
@@ -71,13 +72,14 @@ public class GameController : MonoBehaviour {
 	 * game over has time out before next round starts 3 seconds.
 	 * Highscore??
 	 */
-	public void GameOver(){
-		gameState = GameState.TRANSITION;
+	public void GameOver () {
+		gameState = GameState.GAMEOVER;
 		viewTitle.SetActive( true);
 		winnerLoserUI.OnGameOver (GuiltyPlayer);
 		DestroyAnyDriftingDebri ();
 
-		Invoke("DelayRestartComplete",2);
+		canRestartGame = false;
+		Invoke("AllowGameRestart", 2);
 		// TODO: Delay then restart
 		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_2, 0.2f);
 		AudioController.getSingleton ().PlaySFX(SoundClipId.SFX_GAME_OVER);
@@ -109,8 +111,8 @@ public class GameController : MonoBehaviour {
 		UpdateScoreView();
 	}
 	private void RegisterButtonInput () {
-		// ENTER = Start a new game
-		if (Input.GetKeyDown (KeyCode.Return)) {
+		// R = Start a new game
+		if (Input.GetKeyDown (KeyCode.R)) {
 			ReloadScene ();
 		}
 		//		// Action Button
@@ -118,34 +120,33 @@ public class GameController : MonoBehaviour {
 		//			OnButtonDown_Action ();
 		//		}
 		// P = Toggle pause
-		else if (Input.GetKeyDown (KeyCode.Escape)) {
+		else if (Input.GetKeyDown (KeyCode.P)) {
 			TogglePause ();
 		}
 	}
 
-	private void DelayRestartComplete(){
-		gameState = GameState.GAMEOVER;
+	private void AllowGameRestart () {
+		canRestartGame = true;
 	}
 
 	private void PlayerInput(){
-		if(gameState == GameState.GAMEOVER){
-			StartNewGame();
+		if(gameState == GameState.GAMEOVER && canRestartGame){
+			StartNewGame ();
 
-			viewTitle.SetActive(false);
-			gameState =  GameState.PLAYING;
+			viewTitle.SetActive (false);
+			gameState = GameState.PLAYING;
 		}
 	}
 
 	private void UpdateScoreView(){
-
 		if(gameState != GameState.PLAYING){ return;};
 
 		score = blob.numOfDebrisCollected;
 
-		if(score >= highscore){
+		if(score >= highscore) {
 			highscore = score;
-			textHighScore.color = Color.red;
-			textScore.color = Color.red;
+			textHighScore.color = new Color(255/255f, 180/255f, 0/255f);
+			textScore.color = new Color(255/255f, 180/255f, 0/255f);
 		}else{
 			// not a new highscore
 			textHighScore.color = Color.white;

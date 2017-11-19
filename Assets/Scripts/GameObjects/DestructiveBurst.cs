@@ -25,11 +25,11 @@ public class DestructiveBurst : MonoBehaviour {
 	}
 
 	private void FixedUpdate () {
-//		alpha -= 0.03f;
-//		ApplyAlpha ();
-//		if (alpha <= 0) {
-//			Destroy (this.gameObject);
-//		}
+		alpha -= 0.03f;
+		ApplyAlpha ();
+		if (alpha <= 0) {
+			Destroy (this.gameObject);
+		}
 	}
 
 //	private void OnTriggerEnter2D (Collider2D col) {
