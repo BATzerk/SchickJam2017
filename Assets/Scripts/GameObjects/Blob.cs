@@ -12,6 +12,7 @@ public class Blob : MonoBehaviour {
 	[SerializeField] private GameCameraController cameraController;
 	[SerializeField] private GameController gameController;
 	[SerializeField] private PaddleController paddleController;
+	[SerializeField] private Transform tf_destructiveBursts;
 	private List<Debri> myDebri; // all the Schick that's stuck to me! Schickhead!
 
 	public float life;
@@ -39,6 +40,7 @@ public class Blob : MonoBehaviour {
 	// ----------------------------------------------------------------
 	public void Reset () {
 		GameUtils.DestroyAllChildren (tf_myDebris);
+		GameUtils.DestroyAllChildren (tf_destructiveBursts);
 		myDebri = new List<Debri>();
 		cachedRadius = 1f;
 		life = maxLife;
@@ -79,8 +81,8 @@ public class Blob : MonoBehaviour {
 	private void AddDestructiveBurst (Vector2 pos) {
 		DestructiveBurst burst = Instantiate(prefabGO_destructiveBurst).GetComponent<DestructiveBurst>();
 		float burstRadius = cachedRadius * 0.6f; // the bigger I am, the bigger the blast radius is!
-		burst.Initialize (this.transform, pos, burstRadius);
-		BlowUpDebriInArea (pos, burstRadius);
+		burst.Initialize (tf_destructiveBursts, pos, burstRadius);
+//		BlowUpDebriInArea (pos, burstRadius);
 	}
 	private void RemoveDebri (Debri _debri, bool doUpdateRadius) {
 		if (!myDebri.Contains(_debri)) {

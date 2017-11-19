@@ -53,6 +53,7 @@ public class GameController : MonoBehaviour {
 	private void StartNewGame () {
 		// Reset values.
 		GuiltyPlayer = -1; // no one is guilty!!!!
+		Time.timeScale = 1f;
 
 		// Reset peeps.
 		winnerLoserUI.Reset ();
@@ -74,12 +75,22 @@ public class GameController : MonoBehaviour {
 		gameState = GameState.TRANSITION;
 		viewTitle.SetActive( true);
 		winnerLoserUI.OnGameOver (GuiltyPlayer);
+		DestroyAnyDriftingDebri ();
 
 		Invoke("DelayRestartComplete",2);
 		// TODO: Delay then restart
 		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_2, 0.2f);
 		AudioController.getSingleton ().PlaySFX(SoundClipId.SFX_GAME_OVER);
+	}
 
+	private void DestroyAnyDriftingDebri () {
+		// Brute-force it!
+		Debri[] allDebri = GameObject.FindObjectsOfType<Debri>();
+		for (int i=allDebri.Length-1; i>=0; --i) {
+			if (allDebri[i].CurrentState == Debri.States.Drifting) {
+				Destroy (allDebri[i].gameObject);
+			}
+		}
 	}
 
 
@@ -148,7 +159,6 @@ public class GameController : MonoBehaviour {
 	void OnEnable()
 	{
 		Paddle.OnPlayerInput += PlayerInput;
-
 	}
 
 

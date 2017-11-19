@@ -18,7 +18,7 @@ public class WinnerLoserUI : MonoBehaviour {
 		int s = smallest;
 
 		go_player0Lose.SetActive (s==0);
-		go_player1Lose.SetActive (s!=0);
+		go_player1Lose.SetActive (s==1);
 		// Why aren't there more comments after code
 	}
 }

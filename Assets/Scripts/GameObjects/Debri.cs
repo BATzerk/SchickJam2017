@@ -5,13 +5,17 @@ using UnityEngine;
 public class Debri : MonoBehaviour {
 	// Constants
 	public enum Types { Good, Bad }
+	public enum States { Drifting, OnBlob }
 	// Components
+	[SerializeField] private SpriteRenderer bodySprite;
 	[SerializeField] private Rigidbody2D rigidbody;
 	// Properties
-	private Types type;
 	private Blob myBlob;
+	private States currentState;
+	private Types type;
 
 	// Getters
+	public States CurrentState { get { return currentState; } }
 	public Types Type { get { return type; } }
 
 	// ----------------------------------------------------------------
@@ -24,7 +28,7 @@ public class Debri : MonoBehaviour {
 	
 		this.name = "Debri_" + _type;
 
-		// TODO: Set sprite! And collider!
+		currentState = States.Drifting;
 
 		type = _type;
 		this.transform.localPosition = _pos;
@@ -42,18 +46,35 @@ public class Debri : MonoBehaviour {
 			// pick random good sprit
 			imgs = new string[] {"Shapes/good1"};//b, "Shapes/good2", "Shapes/good3", "Shapes/good4", "Shapes/good5"};
 			gameObject.transform.localScale = (gameObject.transform.localScale * 0.5f) + this.transform.localScale * Random.Range(0,2f);
-
 		}
 		index = Random.Range(0, imgs.Length);
 		spt = Resources.Load <Sprite> (imgs[index]);
-		this.GetComponent<SpriteRenderer>().sprite = spt;
+		bodySprite.sprite = spt;
 
 		//Vector3.one * 0.5f  * t
 	}
 
 	// ----------------------------------------------------------------
-	//  Doers
+	//  Update
 	// ----------------------------------------------------------------
+	private void FixedUpdate () {
+		UpdateRotation ();
+		if (type==Types.Bad){
+			UpdateAndApplyAlpha ();
+		}
+	}
+	private void UpdateRotation () {
+		// If I'm drifting, point me in the direction of my velocity!
+		if (currentState == States.Drifting) {
+			float rotation = Mathf.Atan2(rigidbody.velocity.y, rigidbody.velocity.x) * Mathf.Rad2Deg;
+			this.transform.localEulerAngles = new Vector3(0, 0, rotation);
+		}
+	}
+	private void UpdateAndApplyAlpha () {
+		float alpha = Mathf.Sin (Time.time*10f)*0.5f + 1f;
+		GameUtils.SetSpriteAlpha (bodySprite, alpha);
+	}
+
 
 	// ----------------------------------------------------------------
 	//  Collisions
@@ -97,6 +118,7 @@ public class Debri : MonoBehaviour {
 		myBlob.OnDebriAdded (this);
 
 		// Update my physical properties!
+		currentState = States.OnBlob;
 		this.gameObject.layer = LayerMask.NameToLayer(LayerNames.Blob);
 //		rigidbody.bodyType = RigidbodyType2D.Kinematic;
 //		rigidbody.velocity = Vector2.zero;
@@ -106,9 +128,6 @@ public class Debri : MonoBehaviour {
 		springJoint.autoConfigureDistance = false;
 		springJoint.distance = Vector2.Distance(this.gameObject.transform.localPosition, col.gameObject.transform.localPosition) * 1.2f;
 		springJoint.connectedBody = col.rigidbody;
-
-		// TEMP!
-	//	this.GetComponent<SpriteRenderer>().color = Color.green;
 
 		Sprite spt = Resources.Load <Sprite> ("Shapes/good2");
 		this.GetComponent<SpriteRenderer>().sprite = spt;
