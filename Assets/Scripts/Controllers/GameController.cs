@@ -79,7 +79,7 @@ public class GameController : MonoBehaviour {
 
 		Invoke("DelayRestartComplete",2);
 		// TODO: Delay then restart
-		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_2, 0.2f);
+		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.2f);
 		AudioController.getSingleton ().PlaySFX(SoundClipId.SFX_GAME_OVER);
 	}
 

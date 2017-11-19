@@ -265,8 +265,22 @@ public class AudioController : MonoBehaviour
 	{
 		//if(bgm.clip != null)
 
+		if (bgm != null) {
+			if(	preveusBgMusic == currentMusic ){
+				// don't restart song
+				bgm.volume = volume;
+
+				return;
+			}
+		}
+
+
 		preveusBgMusic = currentMusic; 
 		currentMusic = url;
+
+
+
+
 
 		AudioClip ac = Resources.Load (url) as AudioClip;
 
@@ -291,12 +305,21 @@ public class AudioController : MonoBehaviour
 
 		//}
 
+	
+
+
 		bgmVol = volume;
-		bgm.clip = ac; // define the clip
+
 		bgm.loop = loop;
 		bgm.time = startTime;
 		bgm.volume = (_muteBGM) ? 0.0f : bgmVol;
-		bgm.Play (); // start the sound
+
+
+			bgm.clip = ac; // define the clip
+			bgm.Play (); 
+		
+
+		// start the sound
 		//DontDestroyOnLoad(bg);
 
 		//Destroy(sfx, ac.length + 0.5f); // destroy object after clip duration

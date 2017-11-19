@@ -26,9 +26,12 @@ public class Blob : MonoBehaviour {
 		// Go through all my children and find who's the farthest from my center!
 		float farthestDistance = 2; // have a minimum value.
 		for (int i=0; i<myDebri.Count; i++) {
-			float distance = myDebri[i].transform.localPosition.magnitude;
-			if (farthestDistance < distance){
-				farthestDistance = distance;
+			if(myDebri[i]){
+				float distance = myDebri[i].transform.localPosition.magnitude;
+
+				if (farthestDistance < distance){
+					farthestDistance = distance;
+				}
 			}
 		}
 		return farthestDistance;
