@@ -73,8 +73,15 @@ public class GameController : MonoBehaviour {
 		debrisController.Reset ();
 		paddleController.Reset ();
 		GameUtils.DestroyAllChildren (tf_particleBursts);
+		Hack_DestroyAllDebri ();
 		AudioController.getSingleton().PlayBGSoundClip(SoundClipId.MUS_BACKGROUND_1, 0.8f);
 		AudioController.getSingleton().PlaySFX(SoundClipId.SFX_GAME_START, 1.0f);
+	}
+	private void Hack_DestroyAllDebri () {
+		Debri[] allDebri = GameObject.FindObjectsOfType<Debri>();
+		for (int i=allDebri.Length-1; i>=0; --i) {
+			GameObject.Destroy (allDebri[i].gameObject);
+		}
 	}
 
 
