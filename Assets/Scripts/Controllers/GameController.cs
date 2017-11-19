@@ -152,8 +152,8 @@ public class GameController : MonoBehaviour {
 			textScore.color = new Color(255/255f, 180/255f, 0/255f);
 		}else{
 			// not a new highscore
-			textHighScore.color = Color.white;
-			textScore.color = Color.white;
+			textHighScore.color = Color.black;
+			textScore.color = Color.black;
 		}
 
 		textScore.text = score.ToString("N0");
